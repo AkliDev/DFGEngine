@@ -1,6 +1,7 @@
+#include "dfgpch.h"
+
 #include "Application.h"
-#include <iostream>
-#include <SDL.h>
+//#include <SDL.h>
 
 namespace DFGEngine
 {

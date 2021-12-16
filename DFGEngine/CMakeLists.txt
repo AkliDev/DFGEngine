@@ -5,6 +5,8 @@ file(GLOB_RECURSE engine_SRC CONFIGURE_DEPENDS
 
 add_library(DFGEngine ${engine_SRC})
 
+target_precompile_headers(DFGEngine PRIVATE src/dfgpch.h)
+
 # Create the source groups for source tree with root at CMAKE_CURRENT_SOURCE_DIR.
 source_group(TREE ${CMAKE_CURRENT_SOURCE_DIR} FILES ${engine_SRC})
 
@@ -13,6 +15,7 @@ set_target_properties( DFGEngine PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${C
 
 #External includes
 target_include_directories(DFGEngine PRIVATE
+	src
 	Vendor/Glad/include
 	Vendor/SDL/include
 )
