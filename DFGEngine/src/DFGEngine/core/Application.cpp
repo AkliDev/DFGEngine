@@ -1,7 +1,7 @@
 #include "dfgpch.h"
 
 #include "Application.h"
-//#include <SDL.h>
+#include <SDL.h>
 
 namespace DFGEngine
 {
@@ -9,7 +9,8 @@ namespace DFGEngine
 
 	Application::Application(const std::string& name)
 	{
-
+		s_instance = this;
+		int success = SDL_Init(SDL_INIT_VIDEO);
 	}
 
 	Application::~Application()
@@ -19,8 +20,25 @@ namespace DFGEngine
 
 	void Application::Run()
 	{
-		std::cout << "Lets do this quick and dirty!" << std::endl;
-		std::cin.get();
+		while (m_Running)
+		{
+			if (!m_Minimized)
+			{			
+				for (Layer* layer : m_LayerStack) { layer->OnUpdate(); }
+			}
+		}
+	}
+
+	void Application::PushLayer(Layer* layer)
+	{
+		m_LayerStack.PushLayer(layer);
+		layer->OnAttach();
+	}
+
+	void Application::PushOverlay(Layer* layer)
+	{
+		m_LayerStack.PushOverlay(layer);
+		layer->OnAttach();
 	}
 
 	void Application::Close()

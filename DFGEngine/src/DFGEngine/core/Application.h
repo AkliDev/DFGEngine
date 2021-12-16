@@ -1,6 +1,7 @@
 #pragma once
 
 #include <string>
+#include "LayerStack.h"
 
 namespace DFGEngine
 {
@@ -11,10 +12,12 @@ namespace DFGEngine
 		virtual ~Application();
 
 		void Run();
-
+		void PushLayer(Layer* layer);
+		void PushOverlay(Layer* layer);
 		void Close();
 
 		static Application& Get() { return *s_instance; }	
+
 
 	private:
 
@@ -22,6 +25,7 @@ namespace DFGEngine
 
 		bool m_Running = true;
 		bool m_Minimized = false;
+		LayerStack m_LayerStack;
 		uint32_t  m_LastFrameTime = 0;
 
 	private:

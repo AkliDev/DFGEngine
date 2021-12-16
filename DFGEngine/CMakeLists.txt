@@ -3,7 +3,7 @@ file(GLOB_RECURSE engine_SRC CONFIGURE_DEPENDS
 	src/*.h
 )
 
-add_library(DFGEngine ${engine_SRC})
+add_library(DFGEngine STATIC ${engine_SRC})
 
 target_precompile_headers(DFGEngine PRIVATE src/dfgpch.h)
 

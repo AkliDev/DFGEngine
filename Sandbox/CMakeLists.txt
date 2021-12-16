@@ -20,3 +20,9 @@ target_include_directories(Sandbox PRIVATE
 target_link_libraries(Sandbox PRIVATE
 	DFGEngine
 )
+
+add_custom_command(TARGET Sandbox POST_BUILD 
+	COMMAND ${CMAKE_COMMAND} -E copy_if_different
+	$<TARGET_FILE:SDL2::SDL2>        
+	$<TARGET_FILE_DIR:Sandbox>
+)
