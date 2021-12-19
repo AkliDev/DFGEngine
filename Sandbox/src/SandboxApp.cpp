@@ -1,4 +1,4 @@
-#include <DFGEngine/core/Application.h>
+#include <DFGEngine.h>
 #include <DFGEngine/core/EntryPoint.h>
 
 #include "Sandbox2D.h"

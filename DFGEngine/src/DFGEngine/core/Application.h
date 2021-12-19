@@ -1,6 +1,6 @@
 #pragma once
 
-#include <string>
+#include "Base.h"
 #include "LayerStack.h"
 
 namespace DFGEngine

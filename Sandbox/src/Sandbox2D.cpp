@@ -1,4 +1,3 @@
-#include <iostream>
 #include "Sandbox2D.h"
 
 Sandbox2D::Sandbox2D()
@@ -9,7 +8,7 @@ Sandbox2D::Sandbox2D()
 
 void Sandbox2D::OnAttach()
 {
-	std::cout << "Lets do this quick and dirty!" << std::endl;
+	DFG_TRACE("Lets do this quick and dirty!");
 }
 
 void Sandbox2D::OnDetach()

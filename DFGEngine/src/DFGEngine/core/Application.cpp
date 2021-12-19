@@ -10,7 +10,6 @@ namespace DFGEngine
 	Application::Application(const std::string& name)
 	{
 		s_instance = this;
-		int success = SDL_Init(SDL_INIT_VIDEO);
 	}
 
 	Application::~Application()

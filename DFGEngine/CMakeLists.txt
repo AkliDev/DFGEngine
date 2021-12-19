@@ -16,8 +16,9 @@ set_target_properties( DFGEngine PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${C
 #External includes
 target_include_directories(DFGEngine PRIVATE
 	src
-	Vendor/Glad/include
+	Vendor/spdlog/include
 	Vendor/SDL/include
+	Vendor/Glad/include	
 )
 
 #External links

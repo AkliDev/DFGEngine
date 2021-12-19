@@ -13,7 +13,9 @@ set_target_properties( Sandbox PROPERTIES RUNTIME_OUTPUT_DIRECTORY_RELEASE ${CMA
 
 #External includes
 target_include_directories(Sandbox PRIVATE
+	
 	${CMAKE_SOURCE_DIR}/DFGEngine/src
+	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/spdlog/include
 )
 
 #External links
