@@ -3,21 +3,24 @@
 
 #include "Sandbox2D.h"
 
-class Sandbox : public DFGEngine::Application
+namespace DFGEngine
 {
-public:
-	Sandbox()
-		: Application("Sandbox")
+	class Sandbox : public Application
 	{
-		PushLayer(new Sandbox2D());
-	}
+	public:
+		Sandbox()
+			: Application("Sandbox")
+		{
+			PushLayer(new Sandbox2D());
+		}
 
-	~Sandbox()
+		~Sandbox()
+		{
+		}
+	};
+
+	DFGEngine::Application* DFGEngine::CreateApplication()
 	{
+		return new Sandbox();
 	}
-};
-
-DFGEngine::Application* DFGEngine::CreateApplication()
-{
-	return new Sandbox();
 }

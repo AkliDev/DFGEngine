@@ -18,7 +18,8 @@ target_include_directories(DFGEngine PRIVATE
 	src
 	Vendor/spdlog/include
 	Vendor/SDL/include
-	Vendor/Glad/include	
+	Vendor/Glad/include
+	Vendor/glm	
 )
 
 #External links

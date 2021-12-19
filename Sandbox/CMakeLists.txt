@@ -16,6 +16,7 @@ target_include_directories(Sandbox PRIVATE
 	
 	${CMAKE_SOURCE_DIR}/DFGEngine/src
 	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/spdlog/include
+	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/glm
 )
 
 #External links

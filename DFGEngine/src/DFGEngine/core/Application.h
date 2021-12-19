@@ -2,9 +2,14 @@
 
 #include "Base.h"
 
-//#include "Window.h"
+#include "Window.h"
 #include "LayerStack.h"
 #include "DFGEngine/Events/Event.h"
+#include "DFGEngine/Events/ApplicationEvent.h"
+
+#include "DFGEngine/Events/TextEvent.h"
+#include "DFGEngine/Events/KeyEvent.h"
+#include "DFGEngine/Events/MouseEvent.h"
 #include "DFGEngine/Events/ApplicationEvent.h"
 
 namespace DFGEngine
@@ -16,16 +21,25 @@ namespace DFGEngine
 		virtual ~Application();
 
 		void Run();
+
+		void OnEvent(Event& e);
+
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 		void Close();
 
 		static Application& Get() { return *s_instance; }	
-
-
-	private:
+		inline Window& GetWindow() { return *m_Window; }
 
 	private:
+		bool OnWindowClosed(WindowCloseEvent& e);
+		bool OnKeyPressedEvent(KeyPressedEvent& e);
+		bool OnWindowResized(WindowResizeEvent& e);
+		bool OnWindowMinimized(WindowMinimizedEvent& e);
+		bool OnWindowRestored(WindowRestoredEvent& e);
+
+	private:
+		Scope<Window> m_Window;
 
 		bool m_Running = true;
 		bool m_Minimized = false;
