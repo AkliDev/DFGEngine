@@ -1,5 +1,14 @@
 #pragma once
 
+#include "DFGEngine/Core/PlatformDetection.h"
+
+//#ifdef DFG_PLATFORM_WINDOWS
+//	#ifndef NOMINMAX
+//		// See github.com/skypjack/entt/wiki/Frequently-Asked-Questions#warning-c4003-the-min-the-max-and-the-macro
+//		#define NOMINMAX
+//	#endif
+//#endif
+
 #include <iostream>
 #include <memory>
 #include <utility>
@@ -12,3 +21,13 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
+
+#include "DFGEngine/Core/Base.h"
+
+#include "DFGEngine/Core/Log.h"
+
+//#include "DFEngine/Debug/Instrumentor.h"
+
+#ifdef DFG_PLATFORM_WINDOWS
+	#include <Windows.h>
+#endif
