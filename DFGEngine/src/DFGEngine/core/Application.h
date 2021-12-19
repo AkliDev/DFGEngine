@@ -1,7 +1,11 @@
 #pragma once
 
 #include "Base.h"
+
+//#include "Window.h"
 #include "LayerStack.h"
+#include "DFGEngine/Events/Event.h"
+#include "DFGEngine/Events/ApplicationEvent.h"
 
 namespace DFGEngine
 {
