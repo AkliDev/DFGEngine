@@ -4,3 +4,7 @@
 [submodule "DFGEngine/Vendor/glm"]
 	path = DFGEngine/Vendor/glm
 	url = https://github.com/g-truc/glm.git
+[submodule "DFGEngine/Vendor/SDL"]
+	path = DFGEngine/Vendor/SDL
+	url = https://github.com/libsdl-org/SDL
+
