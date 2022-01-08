@@ -3,6 +3,7 @@
 #include "Application.h"
 
 #include "DFGEngine/Renderer/Renderer.h"
+#include "DFGEngine/Renderer/Shader.h"
 #include "DFGEngine/Core/KeyCodes.h"
 
 #include <SDL.h>
@@ -11,6 +12,7 @@
 namespace DFGEngine
 {
 	Application* Application::s_instance = nullptr;
+	static Ref<Shader> s_Shader;
 
 	Application::Application(const std::string& name)
 	{
@@ -65,6 +67,8 @@ namespace DFGEngine
 			}
 		)";
 
+		s_Shader = Shader::Create("test", vertexShaderSource, fragmentShaderSource);
+#if 0
 		unsigned int vertexShader;
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
@@ -111,6 +115,7 @@ namespace DFGEngine
 
 		glDeleteShader(vertexShader);
 		glDeleteShader(fragmentShader);
+#endif
 
 		float vertices[] = {
 			// first quad
@@ -163,13 +168,14 @@ namespace DFGEngine
 			RenderCommand::Clear();
 
 			// draw our first triangle
-			glUseProgram(shaderProgram);
+			s_Shader->Bind();
 
-			int UniformLocation = glGetUniformLocation(shaderProgram, "SinValue");
-			glUniform1f(UniformLocation, sinValue);
+			s_Shader->SetFloat("SinValue", sinValue);
 
 			glBindVertexArray(VAO); // seeing as we only have a single VAO there's no need to bind it every time, but we'll do so to keep things a bit more organized
 			glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+			s_Shader->Unbind();
 
 			if (!m_Minimized)
 			{			

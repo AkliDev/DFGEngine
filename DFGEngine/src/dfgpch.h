@@ -22,6 +22,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
+#include <fstream>
+
 #include "DFGEngine/Core/Base.h"
 
 #include "DFGEngine/Core/Log.h"
