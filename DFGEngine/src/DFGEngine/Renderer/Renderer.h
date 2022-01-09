@@ -2,7 +2,7 @@
 
 #include "RenderCommand.h"
 //#include "Camera.h"
-//#include "Shader.h"
+#include "Shader.h"
 
 namespace DFGEngine
 {
