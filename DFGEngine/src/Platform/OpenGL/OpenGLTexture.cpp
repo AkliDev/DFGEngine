@@ -77,8 +77,10 @@ namespace DFGEngine
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
 		//DFG_PROFILE_FUNCTION();
-
-		glDeleteTextures(1, &m_RendererID);
+		if (m_RendererID != 0)
+		{
+			glDeleteTextures(1, &m_RendererID);
+		}
 	}
 
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)

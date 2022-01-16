@@ -27,6 +27,8 @@ namespace DFGEngine
 		{
 			return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;
 		}
+	public:
+		void InvalidateTextureID() { DFG_CORE_TRACE("Invalidated textureID {0}", m_RendererID); m_RendererID = 0; };
 	
 	private:
 		std::string m_Path;

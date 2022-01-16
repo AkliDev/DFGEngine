@@ -111,17 +111,16 @@ namespace DFGEngine
 	OpenGLFrameBuffer::~OpenGLFrameBuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
-		//glDeleteTextures(m_ColorAttachmentIDs.size(), m_ColorAttachmentIDs.data());
-		/*
-		Makes multiple calls to glDeleteTextures in the destructor of OpenGLTexture2D.
-		I really don't like this.
-		Ideally I would want the deletion of framebuffer attachments to be handled by OpenGLFrameBuffer.
-		Sadly I also do not want to make an identical OpenGLTexture2D where the only difference is that the destructor does not call glDeleteTextures.
-		*/
-		m_ColorAttachmentTextures.clear(); //Makes multiple calls to glDeleteTextures instead of one. I don't like this.
+		glDeleteTextures(m_ColorAttachmentIDs.size(), m_ColorAttachmentIDs.data());
 		glDeleteTextures(1, &m_DepthAttachmentID);
 
 		m_ColorAttachmentIDs.clear();
+
+		for (auto tex : m_ColorAttachmentTextures)
+		{
+			tex->InvalidateTextureID();
+		}
+		m_ColorAttachmentTextures.clear();
 		m_DepthAttachmentID = 0;
 	}
 
@@ -130,20 +129,17 @@ namespace DFGEngine
 		if (m_RendererID)
 		{
 			glDeleteFramebuffers(1, &m_RendererID);
-			//glDeleteTextures(m_ColorAttachmentIDs.size(), m_ColorAttachmentIDs.data());
-
-			/*
-			Makes multiple calls to glDeleteTextures in the destructor of OpenGLTexture2D. 
-			I really don't like this.
-			Ideally I would want the deletion of framebuffer attachments to be handled by OpenGLFrameBuffer.
-			Sadly I also do not want to make an identical OpenGLTexture2D where the only difference is that the destructor does not call glDeleteTextures.
-			On the other hand, buffer resizing does not happen during critical runtime. 
-			*/
-			m_ColorAttachmentTextures.clear();  
+			glDeleteTextures(m_ColorAttachmentIDs.size(), m_ColorAttachmentIDs.data());				
 			glDeleteTextures(1, &m_DepthAttachmentID);
 
 			m_ColorAttachmentIDs.clear();
-			m_DepthAttachmentID = 0;		
+				
+			for (auto tex : m_ColorAttachmentTextures)
+			{
+				tex->InvalidateTextureID();
+			}
+			m_ColorAttachmentTextures.clear();
+			m_DepthAttachmentID = 0;
 		}
 
 		glCreateFramebuffers(1, &m_RendererID);

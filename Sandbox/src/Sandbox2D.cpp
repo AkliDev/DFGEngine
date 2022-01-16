@@ -11,14 +11,12 @@ namespace DFGEngine
 
 	void Sandbox2D::OnAttach()
 	{
-		DFG_TRACE("Lets do this quick and dirty!");
-
 		FramebufferSpecification fbSpec;
 		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		fbSpec.Width = Application::Get().GetWindow().GetWidth();
 		fbSpec.Height = Application::Get().GetWindow().GetHeight();
 		m_Framebuffer = FrameBuffer::Create(fbSpec);
-		m_Framebuffer->Resize(fbSpec.Width, fbSpec.Height);
+
 		m_Texture = Texture2D::Create("assets/textures/Goombah.png");;
 	}
 
