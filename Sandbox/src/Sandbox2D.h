@@ -16,5 +16,9 @@ namespace DFGEngine
 		void OnUpdate() override;
 
 		void OnEvent(Event& e) override;
+		bool OnWindowResized(WindowResizeEvent& e);
+	private:
+		Ref<FrameBuffer> m_Framebuffer;
+		Ref<Texture2D> m_Texture;
 	};
 }

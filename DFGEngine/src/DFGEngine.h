@@ -12,6 +12,12 @@
 
 //Renderer
 #include "DFGEngine/Renderer/Renderer.h"
+#include "DFGEngine/Renderer/Renderer2D.h"
 #include "DFGEngine/Renderer/RenderCommand.h"
 
+#include "DFGEngine/Renderer/Buffer.h"
 #include "DFGEngine/Renderer/Shader.h"
+#include "DFGEngine/Renderer/FrameBuffer.h"
+#include "DFGEngine/Renderer/Texture.h"
+#include "DFGEngine/Renderer/SubTexture2D.h"
+#include "DFGEngine/Renderer/VertexArray.h"

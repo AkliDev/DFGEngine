@@ -17,11 +17,13 @@ target_include_directories(Sandbox PRIVATE
 	${CMAKE_SOURCE_DIR}/DFGEngine/src
 	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/spdlog/include
 	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/glm
+	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/Glad/include
 )
 
 #External links
 target_link_libraries(Sandbox PRIVATE
 	DFGEngine
+	glad::glad
 )
 
 add_custom_command(TARGET Sandbox POST_BUILD 

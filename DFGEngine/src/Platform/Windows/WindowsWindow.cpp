@@ -50,7 +50,7 @@ namespace DFGEngine {
 
 		{
 			//DFG_PROFILE_SCOPE("SDLCreateWindow");
-			m_Window = SDL_CreateWindow(props.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, props.Width, props.Height, SDL_WINDOW_OPENGL);
+			m_Window = SDL_CreateWindow(props.Title.c_str(), SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, props.Width, props.Height, SDL_WINDOW_OPENGL);		
 			SDL_SetWindowResizable(m_Window, SDL_TRUE);
 			++s_SDLWindowCount;
 		}

@@ -1,6 +1,8 @@
 file(GLOB_RECURSE engine_SRC CONFIGURE_DEPENDS 
 	src/*.cpp 
 	src/*.h
+	vendor/stb_image/**.h,
+	vendor/stb_image/**.cpp
 )
 
 add_library(DFGEngine STATIC ${engine_SRC})
@@ -20,6 +22,7 @@ target_include_directories(DFGEngine PRIVATE
 	Vendor/SDL/include
 	Vendor/Glad/include
 	Vendor/glm	
+	Vendor/stb_image
 )
 
 #External links
