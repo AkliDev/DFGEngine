@@ -31,7 +31,3 @@ target_link_libraries(DFGEngine PRIVATE
 	SDL2::SDL2 
 	SDL2::SDL2main
 )
-target_compile_definitions(DFGEngine PRIVATE _CRT_SECURE_NO_WARNINGS)
-
-target_compile_definitions(DFGEngine PRIVATE $<$<CONFIG:DEBUG>:DFG_DEBUG>)
-target_compile_definitions(DFGEngine PRIVATE $<$<CONFIG:RELEASE>:DFG_RELEASE>)

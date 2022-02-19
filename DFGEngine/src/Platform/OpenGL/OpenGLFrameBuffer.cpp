@@ -118,7 +118,6 @@ namespace DFGEngine
 
 		for (auto tex : m_ColorAttachmentTextures)
 		{
-			DFG_CORE_TRACE("Invalidated framebuffer {0}", tex->GetRenderID());
 			tex->InvalidateTextureID();
 		}
 		m_ColorAttachmentTextures.clear();
@@ -136,10 +135,8 @@ namespace DFGEngine
 			m_ColorAttachmentIDs.clear();
 				
 			for (auto tex : m_ColorAttachmentTextures)
-			{			
-				DFG_CORE_TRACE("Invalidated framebuffer {0}", tex->GetRenderID());
+			{
 				tex->InvalidateTextureID();
-				
 			}
 			m_ColorAttachmentTextures.clear();
 			m_DepthAttachmentID = 0;
@@ -217,7 +214,7 @@ namespace DFGEngine
 	{
 		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height == s_MaxFramebufferSize)
 		{
-			DFG_CORE_WARN("Attempted to resize framebuffer to {1},{2}", width,height);
+			DFG_CORE_WARN("Attempted to resize framebuffer to {}1,{2}", width,height);
 			return;
 		}
 		m_Specification.Width = width;
