@@ -17,7 +17,8 @@ namespace DFGEngine
 		fbSpec.Height = Application::Get().GetWindow().GetHeight();
 		m_Framebuffer = FrameBuffer::Create(fbSpec);
 
-		m_Texture = Texture2D::Create("assets/textures/Goombah.png");;
+		m_ActiveScene = CreateRef<Scene>();
+		m_EditorCamera = EditorCamera(30.0f, 1.77777777778f, 0.1f, 1000.0f);
 	}
 
 	void Sandbox2D::OnDetach()
@@ -27,13 +28,16 @@ namespace DFGEngine
 
 	void Sandbox2D::OnUpdate()
 	{
+		m_ActiveScene->OnUpdate();
+		m_EditorCamera.OnUpdate();
+		
+		Renderer2D::ResetStats();
 		m_Framebuffer->Bind();
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
 		
-		Renderer2D::BeginScene(glm::mat4(1.0f));
-		Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 2.0f, 2.0f }, m_Texture);
-		Renderer2D::EndScene();
+		m_ActiveScene->OnRender(m_EditorCamera);
+		
 		m_Framebuffer->Unbind();
 
 		RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1 });
@@ -46,6 +50,8 @@ namespace DFGEngine
 
 	void Sandbox2D::OnEvent(Event& e)
 	{
+		m_EditorCamera.OnEvent(e);
+
 		EventDispatcher dispatcher(e);
 		dispatcher.Dispatch<WindowResizeEvent>(DFG_BIND_EVENT_FN(Sandbox2D::OnWindowResized));
 	}
@@ -53,6 +59,8 @@ namespace DFGEngine
 	bool Sandbox2D::OnWindowResized(WindowResizeEvent& e)
 	{
 		m_Framebuffer->Resize(e.GetWidth(), e.GetHeight());
+		m_EditorCamera.SetViewportSize(e.GetWidth(), e.GetHeight());
+		m_ActiveScene->OnViewportResize((int32_t)e.GetWidth(), (int32_t)e.GetHeight());
 		return false;
 	}
 }

@@ -1,8 +1,8 @@
 #pragma once
 #include "Renderer2D.h"
 
-//#include "DFGEngine/Renderer/Camera.h"
-//#include "DFGEngine/Renderer/EditorCamera.h"
+#include "DFGEngine/Renderer/Camera.h"
+#include "DFGEngine/Renderer/EditorCamera.h"
 
 #include "DFGEngine/Renderer/Texture.h"
 #include "DFGEngine/Renderer/SubTexture2D.h"
@@ -16,9 +16,10 @@ namespace DFGEngine
 	public:
 		static void Init();
 		static void ShutDown();
-#if 0
+
 		static void BeginScene(const Camera& camera, const glm::mat4& transform);
 		static void BeginScene(const EditorCamera& camera);
+#if 1
 		static void BeginScene(const OrthographicCamera& camera);
 #endif
 		static void BeginScene(const glm::mat4& transform);

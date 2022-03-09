@@ -31,3 +31,6 @@ add_custom_command(TARGET Sandbox POST_BUILD
 	$<TARGET_FILE:SDL2::SDL2>        
 	$<TARGET_FILE_DIR:Sandbox>
 )
+
+target_compile_definitions(Sandbox PRIVATE $<$<CONFIG:DEBUG>:DFG_DEBUG>)
+target_compile_definitions(Sandbox PRIVATE $<$<CONFIG:RELEASE>:DFG_RELEASE>)

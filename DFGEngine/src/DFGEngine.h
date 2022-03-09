@@ -10,6 +10,8 @@
 #include "DFGEngine/Core/KeyCodes.h"
 #include "DFGEngine/Core/MouseCodes.h"
 
+#include "DFGEngine/Scene/Scene.h"
+
 //Renderer
 #include "DFGEngine/Renderer/Renderer.h"
 #include "DFGEngine/Renderer/Renderer2D.h"

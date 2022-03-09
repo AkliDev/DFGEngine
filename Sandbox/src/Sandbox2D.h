@@ -1,6 +1,7 @@
 #pragma once
 
 #include "DFGEngine.h"
+#include "DFGEngine/Renderer/EditorCamera.h"
 
 namespace DFGEngine
 {
@@ -19,6 +20,8 @@ namespace DFGEngine
 		bool OnWindowResized(WindowResizeEvent& e);
 	private:
 		Ref<FrameBuffer> m_Framebuffer;
-		Ref<Texture2D> m_Texture;
+
+		Ref<Scene> m_ActiveScene;
+		EditorCamera m_EditorCamera;
 	};
 }

@@ -121,7 +121,7 @@ namespace DFGEngine
 
 
 	// BeginScene camera
-#if 0 
+
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
 		//DFG_PROFILE_FUNCTION();
@@ -146,6 +146,7 @@ namespace DFGEngine
 		StartBatch();
 	}
 
+#if 0 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		//DFG_PROFILE_FUNCTION();
