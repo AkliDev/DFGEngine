@@ -1,2 +1,2 @@
 # DFGEngine
-A fighting game engine to learn the process and to reach devinitity. 
+A fighting game engine to learn the process and to reach divinity . 
