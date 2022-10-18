@@ -32,6 +32,12 @@ add_custom_command(TARGET Sandbox POST_BUILD
         ${CMAKE_CURRENT_BINARY_DIR}/assets
 )
 
+add_custom_command(TARGET Sandbox POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory 
+        ${CMAKE_CURRENT_LIST_DIR}/assets
+        $<TARGET_FILE_DIR:Sandbox>/assets
+)
+
 add_custom_command(TARGET Sandbox POST_BUILD 
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
 	$<TARGET_FILE:SDL2::SDL2>        
