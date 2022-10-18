@@ -17,12 +17,12 @@ namespace DFGEngine
 
 	}
 
-	void Scene::OnUpdate(/*Timestep ts*/)
+	void Scene::OnUpdate(Timestep ts)
 	{
 		
 	}
 
-	void Scene::OnRender(/*Timestep ts*/ EditorCamera Camera)
+	void Scene::OnRender(EditorCamera Camera)
 	{
 		Renderer2D::BeginScene(Camera);
 		Renderer2D::DrawQuad({ 0.0f, 0.0f }, { 2.0f, 2.0f }, { 1.0f, 1.0f, 1.0f, 1.0f });

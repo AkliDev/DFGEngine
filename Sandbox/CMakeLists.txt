@@ -26,6 +26,12 @@ target_link_libraries(Sandbox PRIVATE
 	glad::glad
 )
 
+add_custom_command(TARGET Sandbox POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_directory 
+        ${CMAKE_CURRENT_LIST_DIR}/assets
+        ${CMAKE_CURRENT_BINARY_DIR}/assets
+)
+
 add_custom_command(TARGET Sandbox POST_BUILD 
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
 	$<TARGET_FILE:SDL2::SDL2>        

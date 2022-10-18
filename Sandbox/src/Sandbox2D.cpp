@@ -26,9 +26,9 @@ namespace DFGEngine
 
 	}
 
-	void Sandbox2D::OnUpdate()
+	void Sandbox2D::OnUpdate(Timestep ts)
 	{
-		m_ActiveScene->OnUpdate();
+		m_ActiveScene->OnUpdate(ts);
 		m_EditorCamera.OnUpdate();
 		
 		Renderer2D::ResetStats();

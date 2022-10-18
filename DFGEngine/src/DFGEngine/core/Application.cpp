@@ -5,9 +5,7 @@
 #include "DFGEngine/Renderer/Renderer.h"
 #include "DFGEngine/Core/KeyCodes.h"
 
-#include "DFGEngine/Renderer/Shader.h"
-#include "DFGEngine/Renderer/Buffer.h"
-#include "DFGEngine/Renderer/VertexArray.h"
+#include <SDL.h>
 
 namespace DFGEngine
 {
@@ -40,12 +38,15 @@ namespace DFGEngine
 		while (m_Running)
 		{
 			//DFG_PROFILE_SCOPE("RunLoop");
+			uint32_t  time = SDL_GetTicks(); // TODO make platform independent 
+			Timestep timestep = time - m_LastFrameTime;
+			m_LastFrameTime = time;
 
 			if (!m_Minimized)
 			{			
 				//DFG_PROFILE_SCOPE("LayerStack OnUpdate");
 
-				for (Layer* layer : m_LayerStack) { layer->OnUpdate(); }
+				for (Layer* layer : m_LayerStack) { layer->OnUpdate(timestep); }
 			}
 
 			m_Window->OnUpdate();

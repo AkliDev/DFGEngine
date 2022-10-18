@@ -1,6 +1,6 @@
 #pragma once
 
-//#include "DFGEngine/Core/Timestep.h"
+#include "DFGEngine/Core/Timestep.h"
 #include "DFGEngine/Renderer/EditorCamera.h"
 
 namespace DFGEngine
@@ -12,8 +12,8 @@ namespace DFGEngine
 		Scene();
 		~Scene();
 
-		void OnUpdate(/*Timestep ts*/);
-		void OnRender(/*Timestep ts*/ EditorCamera Camera);
+		void OnUpdate(Timestep ts);
+		void OnRender(EditorCamera Camera);
 		void OnViewportResize(uint32_t width, uint32_t height);
 
 	private:

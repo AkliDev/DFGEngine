@@ -12,6 +12,8 @@
 #include "DFGEngine/Events/MouseEvent.h"
 #include "DFGEngine/Events/ApplicationEvent.h"
 
+#include "DFGEngine/Core/Timestep.h"
+
 namespace DFGEngine
 {
 	class Application
