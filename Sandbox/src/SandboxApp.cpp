@@ -19,7 +19,7 @@ namespace DFGEngine
 		}
 	};
 
-	DFGEngine::Application* DFGEngine::CreateApplication()
+	Application* DFGEngine::CreateApplication()
 	{
 		return new Sandbox();
 	}

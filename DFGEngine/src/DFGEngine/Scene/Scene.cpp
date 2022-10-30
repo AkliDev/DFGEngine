@@ -3,8 +3,8 @@
 
 //#include "Components.h"
 #include "DFGEngine/Renderer/Renderer2D.h"
+#include "Entity.h"
 
-//#include "Entity.h"
 namespace DFGEngine
 {
 	Scene::Scene()

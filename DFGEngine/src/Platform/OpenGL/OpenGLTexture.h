@@ -17,7 +17,7 @@ namespace DFGEngine
 	
 		virtual uint32_t GetWidth() const override { return m_Width; }
 		virtual uint32_t GetHeight() const override { return m_Height; }
-		virtual uint32_t GetRenderID() const override { return m_RendererID; }
+		virtual uint32_t GetRendererID() const override { return m_RendererID; }
 
 		virtual void SetData(void* data, uint32_t size) override;
 	
@@ -25,7 +25,7 @@ namespace DFGEngine
 
 		virtual bool operator==(const Texture& other) const override
 		{
-			return m_RendererID == ((OpenGLTexture2D&)other).m_RendererID;
+			return m_RendererID == other.GetRendererID();
 		}
 	public:
 		void InvalidateTextureID() { DFG_CORE_TRACE("Invalidated textureID {0}", m_RendererID); m_RendererID = 0; };

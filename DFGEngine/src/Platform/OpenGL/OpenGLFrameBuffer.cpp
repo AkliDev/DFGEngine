@@ -118,7 +118,7 @@ namespace DFGEngine
 
 		for (auto tex : m_ColorAttachmentTextures)
 		{
-			DFG_CORE_TRACE("Invalidated framebuffer {0}", tex->GetRenderID());
+			DFG_CORE_TRACE("Invalidated framebuffer {0}", tex->GetRendererID());
 			tex->InvalidateTextureID();
 		}
 		m_ColorAttachmentTextures.clear();
@@ -137,7 +137,7 @@ namespace DFGEngine
 				
 			for (auto tex : m_ColorAttachmentTextures)
 			{
-				DFG_CORE_TRACE("Invalidated framebuffer {0}", tex->GetRenderID());
+				DFG_CORE_TRACE("Invalidated framebuffer {0}", tex->GetRendererID());
 				tex->InvalidateTextureID();
 			}
 			m_ColorAttachmentTextures.clear();
