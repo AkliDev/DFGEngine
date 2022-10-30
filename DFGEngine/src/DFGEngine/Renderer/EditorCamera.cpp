@@ -5,8 +5,6 @@
 #include "DFGEngine/Core/KeyCodes.h"
 #include "DFGEngine/Core/MouseCodes.h"
 
-//#include <SDL.h>
-
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
@@ -68,11 +66,17 @@ namespace DFGEngine {
 			m_InitialMousePosition = mouse;
 
 			if (Input::IsMouseButtonPressed(Mouse::BUTTON_MIDDLE))
+			{
 				MousePan(delta);
+			}
 			else if (Input::IsMouseButtonPressed(Mouse::BUTTON_LEFT))
+			{
 				MouseRotate(delta);
+			}
 			else if (Input::IsMouseButtonPressed(Mouse::BUTTON_RIGHT))
+			{
 				MouseZoom(delta.y);
+			}
 		}
 
 		UpdateView();

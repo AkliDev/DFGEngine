@@ -12,7 +12,7 @@ namespace DFGEngine
 	void Sandbox2D::OnAttach()
 	{
 		FramebufferSpecification fbSpec;
-		fbSpec.Attachments = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
+		fbSpec.AttachmentSpecification = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		fbSpec.Width = Application::Get().GetWindow().GetWidth();
 		fbSpec.Height = Application::Get().GetWindow().GetHeight();
 		m_Framebuffer = FrameBuffer::Create(fbSpec);

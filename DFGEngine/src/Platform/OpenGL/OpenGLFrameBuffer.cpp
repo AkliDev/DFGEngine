@@ -93,7 +93,7 @@ namespace DFGEngine
 	OpenGLFrameBuffer::OpenGLFrameBuffer(const FramebufferSpecification& specification)
 		:m_Specification(specification)
 	{
-		for (auto spec : m_Specification.Attachments.Attachments)
+		for (auto spec : m_Specification.AttachmentSpecification.Attachments)
 		{
 			if (Utils::IsDepthFormat(spec.TextureFormat) == false)
 			{
