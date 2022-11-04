@@ -8,8 +8,8 @@
 #define GLM_ENABLE_EXPERIMENTAL
 #include <glm/gtx/quaternion.hpp>
 
-namespace DFGEngine {
-
+namespace DFGEngine 
+{
 	EditorCamera::EditorCamera(float fov, float aspectRatio, float nearClip, float farClip)
 		: m_FOV(fov), m_AspectRatio(aspectRatio), m_NearClip(nearClip), m_FarClip(farClip), Camera(glm::perspective(glm::radians(fov), aspectRatio, nearClip, farClip))
 	{
@@ -57,7 +57,7 @@ namespace DFGEngine {
 		return speed;
 	}
 
-	void EditorCamera::OnUpdate(/*Timestep ts*/)
+	void EditorCamera::OnUpdate(Timestep ts)
 	{
 		if (Input::IsKeyPressed(Key::KEY_LALT))
 		{
@@ -66,17 +66,11 @@ namespace DFGEngine {
 			m_InitialMousePosition = mouse;
 
 			if (Input::IsMouseButtonPressed(Mouse::BUTTON_MIDDLE))
-			{
 				MousePan(delta);
-			}
 			else if (Input::IsMouseButtonPressed(Mouse::BUTTON_LEFT))
-			{
 				MouseRotate(delta);
-			}
 			else if (Input::IsMouseButtonPressed(Mouse::BUTTON_RIGHT))
-			{
 				MouseZoom(delta.y);
-			}
 		}
 
 		UpdateView();

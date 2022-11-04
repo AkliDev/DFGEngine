@@ -31,6 +31,11 @@ namespace DFGEngine
 		{
 			s_RendererAPI->DrawIndexed(vertexArray, indexCount);
 		}
+
+		inline static void EnableDepthMask(bool enable)
+		{
+			s_RendererAPI->EnableDepthMask(enable);
+		}
 	private:
 		static Scope<RendererAPI> s_RendererAPI;
 	};

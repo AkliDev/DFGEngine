@@ -30,4 +30,34 @@ namespace DFGEngine
 		DFG_CORE_ASSERT(false, "Unkown RendererAPI!")
 		return nullptr;
 	}
+
+	void TextureLibrary::Add(const std::string& name, const Ref<Texture2D>& texture)
+	{
+		DFG_ASSERT(!Exists(name), "Texture already exists!");
+		m_Textures[name] = texture;
+	}
+
+	void TextureLibrary::Add(const Ref<Texture2D>& texture)
+	{
+		auto& name = texture->GetName();
+		Add(name, texture);
+	}
+
+	Ref<Texture2D> TextureLibrary::Load(const std::string& name, const std::string& filePath)
+	{
+		auto& texture = Texture2D::Create(filePath);
+		Add(name, texture);
+		return texture;
+	}
+
+	Ref<Texture2D> TextureLibrary::Get(const std::string& name)
+	{
+		DFG_ASSERT(Exists(name), "Texture not found!");
+		return m_Textures[name];
+	}
+
+	bool TextureLibrary::Exists(const std::string& name) const
+	{
+		return m_Textures.find(name) != m_Textures.end();
+	}
 }

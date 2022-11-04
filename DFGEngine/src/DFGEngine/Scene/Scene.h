@@ -5,7 +5,6 @@
 
 namespace DFGEngine
 {	
-	class Entity;
 	class Scene
 	{
 	public:
