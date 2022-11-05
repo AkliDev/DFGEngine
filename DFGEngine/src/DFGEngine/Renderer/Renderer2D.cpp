@@ -25,9 +25,9 @@ namespace DFGEngine
 
 	struct Renderer2DData
 	{
-		static const uint32_t MaxQuads = 20000;
-		static const uint32_t MaxQuadVertices = MaxQuads * 4;
-		static const uint32_t MaxQuadIndices = MaxQuads * 6;
+		static const uint32_t MaxQuads = 5000;
+		static const uint32_t MaxVertices = MaxQuads * 4;
+		static const uint32_t MaxIndices = MaxQuads * 6;
 
 		static const uint32_t MaxTextureSlots = 32; // TODO: RenderCaps
 
@@ -36,9 +36,17 @@ namespace DFGEngine
 		Ref<Shader> QuadShader;
 		Ref<Texture2D> WhiteTexture;
 
+		Ref<VertexArray> TextVertexArray;
+		Ref<VertexBuffer> TextVertexBuffer;
+		Ref<Shader> TextShader;
+
 		uint32_t QuadIndexCount = 0;
 		QuadVertex* QuadVertexBufferBase = nullptr;
 		QuadVertex* QuadVertexBufferPtr = nullptr;
+
+		uint32_t TextIndexCount = 0;
+		QuadVertex* TextVertexBufferBase = nullptr;
+		QuadVertex* TextVertexBufferPtr = nullptr;
 
 		std::array<Ref<Texture2D>, MaxTextureSlots > TextureSlots;
 		uint32_t TextureSlotIndex = 1; // 0 = white texture
@@ -57,16 +65,19 @@ namespace DFGEngine
 
 	static Renderer2DData s_Data;
 	TextureLibrary Renderer2D::s_TextureLibrary;
+	TextRenderer Renderer2D::s_TextRenderer;
 
 	void Renderer2D::Init()
 	{
 		//DFG_PROFILE_FUNCTION();
 		
 		s_TextureLibrary = TextureLibrary();
+		s_TextRenderer = TextRenderer();
+		s_TextRenderer.Load("assets/fonts/opensans/OpenSans-Regular.ttf", 48);
 
+		//Quad
 		s_Data.QuadVertexArray = VertexArray::Create();
-
-		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxQuadVertices * sizeof(QuadVertex));
+		s_Data.QuadVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
 		s_Data.QuadVertexBuffer->SetLayout({
 			{ ShaderDataType::Float3,	"a_Position" },
 			{ ShaderDataType::Float4,	"a_Color" },
@@ -76,13 +87,12 @@ namespace DFGEngine
 			{ ShaderDataType::Int,		"a_EntityID" },
 			});
 		s_Data.QuadVertexArray->AddVertexBuffer(s_Data.QuadVertexBuffer);
+		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
 
-		s_Data.QuadVertexBufferBase = new QuadVertex[s_Data.MaxQuadVertices];
-
-		uint32_t* quadIndices = new uint32_t[s_Data.MaxQuadIndices];
+		uint32_t* quadIndices = new uint32_t[s_Data.MaxIndices];
 
 		uint32_t offset = 0;
-		for (uint32_t i = 0; i < s_Data.MaxQuadIndices; i += 6)
+		for (uint32_t i = 0; i < s_Data.MaxIndices; i += 6)
 		{
 			quadIndices[i + 0] = offset + 0;
 			quadIndices[i + 1] = offset + 1;
@@ -95,9 +105,24 @@ namespace DFGEngine
 			offset += 4;
 		}
 
-		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.MaxQuadIndices);
+		Ref<IndexBuffer> quadIB = IndexBuffer::Create(quadIndices, s_Data.MaxIndices);
 		s_Data.QuadVertexArray->SetIndexBuffer(quadIB);
 		delete[] quadIndices;
+
+		// Text
+		s_Data.TextVertexArray = VertexArray::Create();
+		s_Data.TextVertexBuffer = VertexBuffer::Create(s_Data.MaxVertices * sizeof(QuadVertex));
+		s_Data.TextVertexBuffer->SetLayout({
+			{ ShaderDataType::Float3,	"a_Position" },
+			{ ShaderDataType::Float4,	"a_Color" },
+			{ ShaderDataType::Float2,	"a_TexCoord" },
+			{ ShaderDataType::Float,	"a_TexIndex" },
+			{ ShaderDataType::Float,	"a_TilingFactor" },
+			{ ShaderDataType::Int,		"a_EntityID" },
+			});
+		s_Data.TextVertexArray->AddVertexBuffer(s_Data.TextVertexBuffer);
+		s_Data.TextVertexArray->SetIndexBuffer(quadIB); // Use quad IB
+		s_Data.TextVertexBufferBase = new QuadVertex[s_Data.MaxVertices];
 
 		//Create white texture 1x1
 		s_Data.WhiteTexture = Texture2D::Create(1, 1);
@@ -113,6 +138,8 @@ namespace DFGEngine
 
 		//Create Giga Shader
 		s_Data.QuadShader = Shader::Create("assets/shaders/Renderer2D_Quad.glsl");
+		s_Data.TextShader = Shader::Create("assets/shaders/Renderer2D_Text.glsl");
+
 		s_Data.TextureSlots[0] = s_Data.WhiteTexture;
 
 		//Vertex data for a quad
@@ -127,14 +154,13 @@ namespace DFGEngine
 	void Renderer2D::ShutDown()
 	{
 		//DFG_PROFILE_FUNCTION();
-
 		delete[] s_Data.QuadVertexBufferBase;
+		delete[] s_Data.TextVertexBufferBase;
 	}
 
 	void Renderer2D::BeginScene(const OrthographicCamera& camera)
 	{
 		//DFG_PROFILE_FUNCTION();
-
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjectionMatrix();
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
@@ -144,7 +170,6 @@ namespace DFGEngine
 	void Renderer2D::BeginScene(const Camera& camera, const glm::mat4& transform)
 	{
 		//DFG_PROFILE_FUNCTION();
-
 		s_Data.CameraBuffer.ViewProjection = camera.GetProjection() * glm::inverse(transform);
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
@@ -155,7 +180,6 @@ namespace DFGEngine
 	void Renderer2D::BeginScene(const EditorCamera& camera)
 	{
 		//DFG_PROFILE_FUNCTION();
-
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
@@ -166,7 +190,6 @@ namespace DFGEngine
 	void Renderer2D::BeginScene(const glm::mat4& transform)
 	{
 		//DFG_PROFILE_FUNCTION();
-
 		s_Data.CameraBuffer.ViewProjection = transform;
 		s_Data.CameraUniformBuffer->SetData(&s_Data.CameraBuffer, sizeof(Renderer2DData::CameraData));
 
@@ -176,7 +199,6 @@ namespace DFGEngine
 	void Renderer2D::EndScene()
 	{
 		//DFG_PROFILE_FUNCTION();
-
 		Flush();
 	}
 
@@ -184,6 +206,9 @@ namespace DFGEngine
 	{
 		s_Data.QuadIndexCount = 0;
 		s_Data.QuadVertexBufferPtr = s_Data.QuadVertexBufferBase;
+
+		s_Data.TextIndexCount = 0;
+		s_Data.TextVertexBufferPtr = s_Data.TextVertexBufferBase;
 
 		s_Data.TextureSlotIndex = 1;
 	}
@@ -203,6 +228,22 @@ namespace DFGEngine
 
 			s_Data.QuadShader->Bind();
 			RenderCommand::DrawIndexed(s_Data.QuadVertexArray, s_Data.QuadIndexCount);
+			s_Data.Stats.DrawCalls++;
+		}
+
+		if (s_Data.TextIndexCount)
+		{
+			uint32_t dataSize = (uint32_t)((uint8_t*)s_Data.TextVertexBufferPtr - (uint8_t*)s_Data.TextVertexBufferBase);
+			s_Data.TextVertexBuffer->SetData(s_Data.TextVertexBufferBase, dataSize);
+
+			// Bind textures
+			for (uint32_t i = 0; i < s_Data.TextureSlotIndex; i++)
+			{
+				s_Data.TextureSlots[i]->Bind(i);
+			}
+
+			s_Data.TextShader->Bind();
+			RenderCommand::DrawIndexed(s_Data.TextVertexArray, s_Data.TextIndexCount);
 			s_Data.Stats.DrawCalls++;
 		}
 	}
@@ -272,7 +313,7 @@ namespace DFGEngine
 		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 		const float tilingFactor = 1.0f;
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxQuadIndices)
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			NextBatch();
 		}
@@ -300,7 +341,7 @@ namespace DFGEngine
 		constexpr size_t quadVertexCount = 4;
 		constexpr glm::vec2 textureCoords[] = { { 0.0f, 0.0f }, { 1.0f, 0.0f }, { 1.0f, 1.0f }, { 0.0f, 1.0f } };
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxQuadIndices)
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{
 			NextBatch();
 		}
@@ -351,7 +392,7 @@ namespace DFGEngine
 		const glm::vec2* textureCoords = subTexture->GetTexCoords();
 		const Ref<Texture2D> texture = subTexture->GetTexture();
 
-		if (s_Data.QuadIndexCount >= Renderer2DData::MaxQuadIndices)
+		if (s_Data.QuadIndexCount >= Renderer2DData::MaxIndices)
 		{ 
 			NextBatch();
 		}
@@ -452,5 +493,55 @@ namespace DFGEngine
 	void Renderer2D::ResetStats()
 	{
 		memset(&s_Data.Stats, 0, sizeof(Renderer2D::Statistics));
+	}
+
+	void Renderer2D::DrawText(glm::vec3* vertexPositions, const Ref<Texture2D>& texture, float tilingFactor, const glm::vec4& tintColor, int entityID)
+	{
+		constexpr size_t VertexCount = 4;
+		constexpr glm::vec2 textureCoords[] = { { 0.0f, 1.0f }, { 1.0f, 1.0f }, { 1.0f, 0.0f }, { 0.0f, 0.0f } };
+
+		if (s_Data.TextIndexCount >= Renderer2DData::MaxIndices)
+		{
+			NextBatch();
+		}
+
+		float textureIndex = 0.0f;
+		for (uint32_t i = 1; i < s_Data.TextureSlotIndex; i++)
+		{
+			if (*s_Data.TextureSlots[i] == *texture)
+			{
+				textureIndex = (float)i;
+				break;
+			}
+		}
+
+		if (textureIndex == 0.0f)
+		{
+			if (s_Data.TextureSlotIndex >= Renderer2DData::MaxTextureSlots)
+			{
+				NextBatch();
+			}
+
+			textureIndex = (float)s_Data.TextureSlotIndex;
+			s_Data.TextureSlots[s_Data.TextureSlotIndex] = texture;
+			s_Data.TextureSlotIndex++;
+		}
+
+		for (size_t i = 0; i < VertexCount; i++)
+		{
+			s_Data.TextVertexBufferPtr->Position = *vertexPositions;
+			s_Data.TextVertexBufferPtr->Color = tintColor;
+			s_Data.TextVertexBufferPtr->TexCoord = textureCoords[i];
+			s_Data.TextVertexBufferPtr->TexIndex = textureIndex;
+			s_Data.TextVertexBufferPtr->TilingFactor = tilingFactor;
+			s_Data.TextVertexBufferPtr->EntityID = entityID;
+			s_Data.TextVertexBufferPtr++;
+
+			vertexPositions++;
+		}
+
+		s_Data.TextIndexCount += 6;
+
+		s_Data.Stats.QuadCount++;
 	}
 }

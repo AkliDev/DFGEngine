@@ -20,7 +20,6 @@ namespace DFGEngine
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
@@ -63,7 +62,6 @@ namespace DFGEngine
 
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_REPEAT);
 		glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
@@ -74,6 +72,31 @@ namespace DFGEngine
 
 	OpenGLTexture2D::OpenGLTexture2D(const uint32_t colorAttachmentID, const uint32_t width, const uint32_t height, const GLenum m_InternalFormat, const GLenum m_DataFormat)
 		:m_RendererID(colorAttachmentID), m_Width(width), m_Height(height), m_InternalFormat(m_InternalFormat), m_DataFormat(m_DataFormat){}
+
+	OpenGLTexture2D::OpenGLTexture2D(const FT_Face& face)
+		: m_Width(face->glyph->bitmap.width), m_Height(face->glyph->bitmap.rows)
+	{
+		glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+		//glCreateTextures(GL_TEXTURE_2D, 1, &m_RendererID);
+		//glTextureStorage2D(m_RendererID, 1, GL_RED, m_Width, m_Height);
+		//
+		//glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		//glTextureParameteri(m_RendererID, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		//glTextureParameteri(m_RendererID, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		//glTextureParameteri(m_RendererID, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		//
+		//glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, GL_RED, GL_UNSIGNED_BYTE, face->glyph->bitmap.buffer);
+
+		glGenTextures(1, &m_RendererID);
+		glBindTexture(GL_TEXTURE_2D, m_RendererID);
+		glTexImage2D(GL_TEXTURE_2D,0,GL_RED,face->glyph->bitmap.width,face->glyph->bitmap.rows,0,GL_RED,GL_UNSIGNED_BYTE,face->glyph->bitmap.buffer);
+		// set texture options
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	}
 
 	OpenGLTexture2D::~OpenGLTexture2D()
 	{
@@ -87,7 +110,6 @@ namespace DFGEngine
 	void OpenGLTexture2D::SetData(void* data, uint32_t size)
 	{
 		//DFG_PROFILE_FUNCTION();
-
 		uint32_t bpp = m_DataFormat == GL_RGBA ? 4 : 3;
 		DFG_ASSERT(size == m_Width * m_Height * bpp, "Data must be entire texture!");
 		glTextureSubImage2D(m_RendererID, 0, 0, 0, m_Width, m_Height, m_DataFormat, GL_UNSIGNED_BYTE, data);
@@ -96,7 +118,6 @@ namespace DFGEngine
 	void OpenGLTexture2D::Bind(uint32_t slot) const
 	{
 		//DFG_PROFILE_FUNCTION();
-
 		glBindTextureUnit(slot, m_RendererID);
 	}
 }

@@ -11,6 +11,7 @@ namespace DFGEngine
 	public:
 		OpenGLTexture2D(const uint32_t width, const uint32_t height);
 		OpenGLTexture2D(const std::string& path);
+		OpenGLTexture2D(const FT_Face& face);
 		OpenGLTexture2D(const uint32_t colorAttachmentID, const uint32_t width, const uint32_t height, const GLenum m_InternalFormat, const GLenum m_DataFormat);
 		
 		virtual ~OpenGLTexture2D();

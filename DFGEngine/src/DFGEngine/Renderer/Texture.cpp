@@ -4,7 +4,6 @@
 #include "Renderer.h"
 #include "Platform/OpenGL/OpenGLTexture.h"
 
-
 namespace DFGEngine
 {
 	Ref<Texture2D> Texture2D::Create(const uint32_t width, const uint32_t height)
@@ -29,6 +28,18 @@ namespace DFGEngine
 
 		DFG_CORE_ASSERT(false, "Unkown RendererAPI!")
 		return nullptr;
+	}
+
+	DFGEngine::Ref<DFGEngine::Texture2D> Texture2D::Create(const FT_Face& face)
+	{
+		switch (Renderer::GetAPI())
+		{
+		case RendererAPI::API::None:	DFG_CORE_ASSERT(false, "RendererAPI::None is currently not supported!") return nullptr;
+		case RendererAPI::API::OpenGL:	return CreateRef<OpenGLTexture2D>(face);
+		}
+
+		DFG_CORE_ASSERT(false, "Unkown RendererAPI!")
+			return nullptr;
 	}
 
 	void TextureLibrary::Add(const std::string& name, const Ref<Texture2D>& texture)

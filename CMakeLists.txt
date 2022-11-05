@@ -11,11 +11,13 @@ set_property(GLOBAL PROPERTY USE_FOLDERS ON)
 #submodule dependencies
 add_subdirectory(DFGEngine/vendor/SDL)
 add_subdirectory(DFGEngine/vendor/Glad)
+add_subdirectory(DFGEngine/vendor/freetype)
 
 set_target_properties(glad PROPERTIES FOLDER "Dependencies")
 set_target_properties(SDL2 PROPERTIES FOLDER "Dependencies")
 set_target_properties(SDL2main PROPERTIES FOLDER "Dependencies")
 set_target_properties(SDL2-static PROPERTIES FOLDER "Dependencies")
+set_target_properties(freetype PROPERTIES FOLDER "Dependencies")
 
 add_subdirectory(DFGEngine)
 add_subdirectory(DFGEditor)

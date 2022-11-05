@@ -42,6 +42,7 @@ namespace DFGEngine
 	private:
 		Ref<FrameBuffer> m_Framebuffer;
 		EditorCamera m_EditorCamera;
+		float m_ViewportWidth, m_ViewportHeight;
 
 		GameState m_GameState = GAME_ACTIVE;
 		float m_LevelWitdh = 25;

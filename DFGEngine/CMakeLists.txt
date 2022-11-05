@@ -23,6 +23,7 @@ target_include_directories(DFGEngine PRIVATE
 	Vendor/Glad/include
 	Vendor/glm	
 	Vendor/stb_image
+	Vendor/freetype/include
 )
 
 #External links
@@ -30,6 +31,7 @@ target_link_libraries(DFGEngine PRIVATE
 	glad::glad
 	SDL2::SDL2 
 	SDL2::SDL2main
+	freetype
 )
 
 target_compile_definitions(DFGEngine PRIVATE _CRT_SECURE_NO_WARNINGS)

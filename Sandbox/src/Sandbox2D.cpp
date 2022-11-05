@@ -11,11 +11,14 @@ namespace DFGEngine
 	
 	void Sandbox2D::OnAttach()
 	{
+		m_ViewportWidth = Application::Get().GetWindow().GetWidth();
+		m_ViewportHeight = Application::Get().GetWindow().GetHeight();
+
 		//create frame buffer
 		FramebufferSpecification fbSpec;
-		fbSpec.AttachmentSpecification = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
-		fbSpec.Width = Application::Get().GetWindow().GetWidth();
-		fbSpec.Height = Application::Get().GetWindow().GetHeight();
+		fbSpec.AttachmentSpecification = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+		fbSpec.Width = m_ViewportWidth;
+		fbSpec.Height = m_ViewportHeight;
 		m_Framebuffer = FrameBuffer::Create(fbSpec);
 
 		m_EditorCamera = EditorCamera(45.0f, 1.77777777778f, 0.1f, 1000.0f);
@@ -26,7 +29,7 @@ namespace DFGEngine
 		Renderer2D::s_TextureLibrary.Load("sky_right", "assets/textures/lightblue/right.png");
 		Renderer2D::s_TextureLibrary.Load("sky_front", "assets/textures/lightblue/front.png");
 		Renderer2D::s_TextureLibrary.Load("sky_back", "assets/textures/lightblue/back.png");
-
+		
 		Renderer2D::s_TextureLibrary.Load("face", "assets/textures/Goombah.png");
 		Renderer2D::s_TextureLibrary.Load("block", "assets/textures/block.png");
 		Renderer2D::s_TextureLibrary.Load("block_solid", "assets/textures/block_solid.png");
@@ -55,7 +58,7 @@ namespace DFGEngine
 		glm::vec3 pos{ m_LevelWitdh * 0.5f, scale.y * 0.5f, 0.0f };
 		m_Paddle = CreateRef<Paddle>(pos, scale, Renderer2D::s_TextureLibrary.Get("paddle"));
 		m_Paddle->Init(m_LevelWitdh, 20);
-
+		
 		//Create ball
 		float ballRadius = 0.5f;
 		pos = m_Paddle->GetTransformComponent().Translation;
@@ -147,6 +150,25 @@ namespace DFGEngine
 		m_Ball->Stuck(true);
 	}
 
+	void Sandbox2D::OnUpdate(Timestep ts)
+	{
+		HandleInput();
+		
+		m_Paddle->OnUpdate(ts);
+		m_Ball->OnUpdate(ts);
+		m_EditorCamera.OnUpdate(ts);
+		
+		DetectCollisions();
+		
+		if (m_Ball->GetTransformComponent().Translation.y <0) 
+		{
+			//this->ResetLevel();
+			this->ResetPlayer();
+		}
+		
+		OnRender();
+	}
+
 	void Sandbox2D::RenderSky()
 	{
 		// My engine can only render quads. I am too lazy to design an API for cubemaps. 
@@ -162,48 +184,31 @@ namespace DFGEngine
 		RenderCommand::EnableDepthMask(true);
 	}
 
-	void Sandbox2D::OnUpdate(Timestep ts)
-	{
-		HandleInput();
-
-		m_Paddle->OnUpdate(ts);
-		m_Ball->OnUpdate(ts);
-		m_EditorCamera.OnUpdate(ts);
-
-		DetectCollisions();
-
-		if (m_Ball->GetTransformComponent().Translation.y <0) 
-		{
-			//this->ResetLevel();
-			this->ResetPlayer();
-		}
-
-		OnRender();
-	}
-
 	void Sandbox2D::OnRender()
 	{
 		Renderer2D::ResetStats();
 
 		m_Framebuffer->Bind();
+
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
-
 		RenderSky();
-
-		Renderer2D::BeginScene(m_EditorCamera);	
+		Renderer2D::BeginScene(m_EditorCamera);
 		m_Levels[m_CurrentLevel].OnRender();
 		m_Paddle->OnRender();
-		m_Ball->OnRender();	
-		Renderer2D::EndScene();
-
+		m_Ball->OnRender();
+		Renderer2D::EndScene();	
 		m_Framebuffer->Unbind();
 
 		RenderCommand::SetClearColor({ 0.1, 0.1, 0.1, 1 });
 		RenderCommand::Clear();
-
 		Renderer2D::BeginScene(glm::mat4(1.0f));
 		Renderer2D::DrawFrame(m_Framebuffer->GetColorAttachmentAsTexture());
+		Renderer2D::EndScene();
+
+		glm::mat4 projection = glm::ortho(0.0f, m_ViewportWidth, 0.0f, m_ViewportHeight);
+		Renderer2D::BeginScene(projection);
+		Renderer2D::s_TextRenderer.DrawText("OpenGL.com", glm::vec3(0, 25.0f, 0.1f), 1.0f);
 		Renderer2D::EndScene();
 
 		//auto stats = Renderer2D::GetStats();
@@ -219,6 +224,8 @@ namespace DFGEngine
 
 	bool Sandbox2D::OnWindowResized(WindowResizeEvent& e)
 	{
+		m_ViewportWidth = e.GetWidth();
+		m_ViewportHeight = e.GetHeight();
 		m_Framebuffer->Resize(e.GetWidth(), e.GetHeight());
 		m_EditorCamera.SetViewportSize(e.GetWidth(), e.GetHeight());
 		return false;

@@ -2,6 +2,10 @@
 #include "DFGEngine/Core/Base.h"
 #include <string>
 #include <vector>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 namespace DFGEngine
 {
 	class Texture
@@ -27,6 +31,7 @@ namespace DFGEngine
 	public:
 		static Ref<Texture2D> Create(const uint32_t width, const uint32_t height);
 		static Ref<Texture2D> Create(const std::string& path);
+		static Ref<Texture2D> Create(const FT_Face& face);
 	};
 
 	class TextureLibrary

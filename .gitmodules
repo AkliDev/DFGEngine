@@ -8,3 +8,6 @@
 [submodule "DFGEngine/Vendor/SDL"]
 	path = DFGEngine/Vendor/SDL
 	url = https://github.com/libsdl-org/SDL
+[submodule "DFGEngine/Vendor/freetype"]
+	path = DFGEngine/Vendor/freetype
+	url = https://github.com/freetype/freetype.git
