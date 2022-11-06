@@ -20,13 +20,12 @@ namespace DFGEngine
 	{
 		// reset player/ball stats
 		GetTransformComponent().Scale = m_BaseScale;
-		GetTransformComponent().Translation.x = m_HorizontalBound * 0.5f;
 	}
 
 	void Paddle::HandleInput()
 	{
-		if(Input::IsKeyPressed(Key::KEY_A)) { GetPhysicsComponent().Velocity.x = -m_CurrentSpeed; }
-		if(Input::IsKeyPressed(Key::KEY_D)) { GetPhysicsComponent().Velocity.x = m_CurrentSpeed; }
+		if(Input::IsKeyPressed(Key::KEY_A)) { GetPhysicsComponent().Velocity.x -= m_CurrentSpeed; }
+		if(Input::IsKeyPressed(Key::KEY_D)) { GetPhysicsComponent().Velocity.x += m_CurrentSpeed; }
 	}
 
 	void Paddle::OnUpdate(Timestep ts)

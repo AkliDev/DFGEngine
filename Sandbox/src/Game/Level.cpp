@@ -49,11 +49,23 @@ namespace DFGEngine
 	{
 		for (Ref<Brick> brick : m_Bricks)
 		{
-			if (brick->IsDestroyed() == false)
+			if (brick->IsDestroyed() == true)
 			{
 				brick->Destroyed(false);
 			}
 		}
+	}
+
+	bool Level::IsCompleted()
+	{
+		for (Ref<Brick> brick : m_Bricks)
+		{
+			if (brick->IsSolid() == false && brick->IsDestroyed() == false)
+			{
+				return false;
+			}
+		}
+		return true;
 	}
 
 	void Level::Init(std::vector<std::vector<uint32_t>> tileData, float levelWidth, float levelHeight)

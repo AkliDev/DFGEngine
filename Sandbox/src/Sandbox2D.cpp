@@ -16,13 +16,14 @@ namespace DFGEngine
 
 		//create frame buffer
 		FramebufferSpecification fbSpec;
-		fbSpec.AttachmentSpecification = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::RED_INTEGER, FramebufferTextureFormat::Depth };
+		fbSpec.AttachmentSpecification = { FramebufferTextureFormat::RGBA8, FramebufferTextureFormat::Depth };
 		fbSpec.Width = m_ViewportWidth;
 		fbSpec.Height = m_ViewportHeight;
 		m_Framebuffer = FrameBuffer::Create(fbSpec);
 
-		m_EditorCamera = EditorCamera(45.0f, 1.77777777778f, 0.1f, 1000.0f);
+		m_EditorCamera = EditorCamera(120.0f, 1.77777777778f, 0.1f, 1000.0f);
 
+		//load textures
 		Renderer2D::s_TextureLibrary.Load("sky_top", "assets/textures/lightblue/top.png");
 		Renderer2D::s_TextureLibrary.Load("sky_bottom", "assets/textures/lightblue/bottom.png");
 		Renderer2D::s_TextureLibrary.Load("sky_left", "assets/textures/lightblue/left.png");
@@ -70,17 +71,6 @@ namespace DFGEngine
 	void Sandbox2D::OnDetach()
 	{
 		
-	}
-
-	void Sandbox2D::HandleInput()
-	{
-		if (m_GameState == GAME_ACTIVE)
-		{
-			if (Input::IsKeyPressed(Key::KEY_SPACE))
-			{
-				m_Ball->Stuck(false);
-			}
-		}
 	}
 
 	void Sandbox2D::DetectCollisions()
@@ -151,35 +141,50 @@ namespace DFGEngine
 	}
 
 	void Sandbox2D::OnUpdate(Timestep ts)
-	{
-		HandleInput();
-		
-		m_Paddle->OnUpdate(ts);
-		m_Ball->OnUpdate(ts);
-		m_EditorCamera.OnUpdate(ts);
-		
-		DetectCollisions();
-		
-		if (m_Ball->GetTransformComponent().Translation.y <0) 
+	{		
+		if (m_GameState == GAME_ACTIVE)
 		{
-			//this->ResetLevel();
-			this->ResetPlayer();
+			m_Paddle->OnUpdate(ts);
+			m_Ball->OnUpdate(ts);
+			DetectCollisions();
+			// check loss condition
+			if (m_Ball->GetTransformComponent().Translation.y < -4)
+			{
+
+				if (m_Lives == 0)
+				{
+					ResetLevel();
+					m_Lives = 3;
+					m_GameState = GAME_MENU;
+				}
+				ResetPlayer();
+				m_Lives--;
+			}
+			// check win condition
+			if (m_Levels[m_CurrentLevel].IsCompleted())
+			{
+				ResetLevel();
+				ResetPlayer();
+				m_GameState = GAME_WIN;
+			}
 		}
-		
+		m_EditorCamera.OnUpdate(ts);
+
 		OnRender();
 	}
 
 	void Sandbox2D::RenderSky()
 	{
 		// My engine can only render quads. I am too lazy to design an API for cubemaps. 
+		float boxScale = 10.0f;
 		RenderCommand::EnableDepthMask(false);
 		Renderer2D::BeginScene(m_EditorCamera);
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, 0.5f, 0.0f), { 1.0f,1.0f }, glm::vec3(glm::radians(90.0f), 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_top"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, -0.5f, 0.0f), { 1.0f,1.0f }, glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_bottom"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(-0.5f, 0.0f, 0.0f), { 1.0f,1.0f }, glm::vec3(0.0f, glm::radians(90.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_left"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.5f, 0.0f, 0.0f), { 1.0f,1.0f }, glm::vec3(0.0f, glm::radians(-90.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_right"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, 0.0f, -0.5f), { 1.0f,1.0f }, glm::vec3(0.0f, 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_front"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, 0.0f, 0.5f), { -1.0f, 1.0f }, glm::vec3(0.0f, 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_back"));
+		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, boxScale * 0.5f, 0.0f), glm::vec2(boxScale), glm::vec3(glm::radians(90.0f), 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_top"));
+		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, boxScale * -0.5f, 0.0f), glm::vec2(boxScale), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_bottom"));
+		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(boxScale * -0.5f, 0.0f, 0.0f), glm::vec2(boxScale), glm::vec3(0.0f, glm::radians(90.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_left"));
+		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(boxScale * 0.5f, 0.0f, 0.0f), glm::vec2(boxScale), glm::vec3(0.0f, glm::radians(-90.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_right"));
+		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, 0.0f, boxScale * -0.5f), glm::vec2(boxScale), glm::vec3(0.0f, 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_front"));
+		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, 0.0f, boxScale * 0.5f), glm::vec2(boxScale), glm::vec3(0.0f, glm::radians(-180.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_back"));
 		Renderer2D::EndScene();
 		RenderCommand::EnableDepthMask(true);
 	}
@@ -189,7 +194,6 @@ namespace DFGEngine
 		Renderer2D::ResetStats();
 
 		m_Framebuffer->Bind();
-
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
 		RenderSky();
@@ -206,11 +210,28 @@ namespace DFGEngine
 		Renderer2D::DrawFrame(m_Framebuffer->GetColorAttachmentAsTexture());
 		Renderer2D::EndScene();
 
+		
 		glm::mat4 projection = glm::ortho(0.0f, m_ViewportWidth, 0.0f, m_ViewportHeight);
 		Renderer2D::BeginScene(projection);
-		Renderer2D::s_TextRenderer.DrawText("OpenGL.com", glm::vec3(0, 25.0f, 0.1f), 1.0f);
+		
+		if (m_GameState == GAME_WIN)
+		{
+			Renderer2D::s_TextRenderer.DrawText("You won!", glm::vec3(m_ViewportWidth * 0.5f - 300, m_ViewportHeight * 0.5f + 35, 0.1f), 1.0f);
+			Renderer2D::s_TextRenderer.DrawText("Press ENTER to retry or ESC to quit", glm::vec3(m_ViewportWidth * 0.5f - 90, m_ViewportHeight * 0.5f, 0.1f), 0.7f);
+		}
+		if (m_GameState == GAME_MENU)
+		{
+			Renderer2D::s_TextRenderer.DrawText("Press ENTER to start", glm::vec3(m_ViewportWidth * 0.5f - 300, m_ViewportHeight * 0.5f + 35, 0.1f), 1.0f);
+			Renderer2D::s_TextRenderer.DrawText("Press A or D to select level", glm::vec3(m_ViewportWidth * 0.5f - 90, m_ViewportHeight * 0.5f, 0.1f), 0.7f);
+		}
+		if (m_GameState == GAME_ACTIVE)
+		{
+			std::stringstream ss;
+			ss << "Lives: " << m_Lives;
+			Renderer2D::s_TextRenderer.DrawText(ss.str(), glm::vec3(0, m_ViewportHeight - 40.0f, 0.1f), 1.0f);
+		}
 		Renderer2D::EndScene();
-
+	
 		//auto stats = Renderer2D::GetStats();
 		//DFG_TRACE(stats.DrawCalls);
 	}
@@ -219,7 +240,33 @@ namespace DFGEngine
 	{
 		m_EditorCamera.OnEvent(e);
 		EventDispatcher dispatcher(e);
+		dispatcher.Dispatch<KeyPressedEvent>(DFG_BIND_EVENT_FN(Sandbox2D::OnKeyPressed));
 		dispatcher.Dispatch<WindowResizeEvent>(DFG_BIND_EVENT_FN(Sandbox2D::OnWindowResized));
+	}
+
+	bool Sandbox2D::OnKeyPressed(KeyPressedEvent& e)
+	{
+		if (e.IsRepeat() == true)
+		{
+			return false;
+		}
+
+		if (m_GameState == GAME_ACTIVE)
+		{
+			if (e.GetKeyCode() == Key::KEY_SPACE) m_Ball->Stuck(false);
+		}
+
+		if (m_GameState == GAME_MENU)
+		{
+			if (e.GetKeyCode() == Key::KEY_RETURN) m_GameState = GAME_ACTIVE;
+			if (e.GetKeyCode() == Key::KEY_D) m_CurrentLevel = (m_CurrentLevel + 1) % 4;;
+			if (e.GetKeyCode() == Key::KEY_A) m_CurrentLevel = (m_CurrentLevel - 1) % 4;;
+		}
+
+		if (m_GameState == GAME_WIN)
+		{
+			if (e.GetKeyCode() == Key::KEY_RETURN) m_GameState = GAME_MENU;
+		}		
 	}
 
 	bool Sandbox2D::OnWindowResized(WindowResizeEvent& e)

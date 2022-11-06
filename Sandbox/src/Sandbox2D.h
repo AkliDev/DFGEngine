@@ -32,7 +32,7 @@ namespace DFGEngine
 		bool OnWindowResized(WindowResizeEvent& e);
 
 	private:
-		void HandleInput();
+		bool OnKeyPressed(KeyPressedEvent& e);
 		void DetectCollisions();
 		void RenderSky();
 
@@ -44,7 +44,7 @@ namespace DFGEngine
 		EditorCamera m_EditorCamera;
 		float m_ViewportWidth, m_ViewportHeight;
 
-		GameState m_GameState = GAME_ACTIVE;
+		GameState m_GameState = GAME_MENU;
 		float m_LevelWitdh = 25;
 		float m_LevelHeight = 20;
 		std::vector<Level> m_Levels;
@@ -52,6 +52,6 @@ namespace DFGEngine
 
 		Ref<Paddle> m_Paddle;
 		Ref<Ball> m_Ball;
-
+		uint32_t m_Lives = 2;
 	};
 }

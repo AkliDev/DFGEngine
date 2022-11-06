@@ -146,22 +146,21 @@ namespace DFGEngine {
 			}
 			case SDL_KEYDOWN:
 			{
-
 				WindowData& data = *(WindowData*)SDL_GetWindowData(m_Window, "data");
 
 				if (event.key.repeat != 0)
 				{
-					KeyPressedEvent DFG_event(event.key.keysym.scancode, event.key.repeat);
-					data.EventCallback(DFG_event);
+					KeyPressedEvent ALT_event(event.key.keysym.scancode, true);
+					data.EventCallback(ALT_event);
 				}
 				else
 				{
-					KeyPressedEvent DFG_event(event.key.keysym.scancode, 0);
-					data.EventCallback(DFG_event);
+					KeyPressedEvent ALT_event(event.key.keysym.scancode, false);
+					data.EventCallback(ALT_event);
 				}
 
-				KeyTypedEvent DFG_event(event.key.keysym.sym);
-				data.EventCallback(DFG_event);
+				KeyTypedEvent ALT_event(event.key.keysym.sym);
+				data.EventCallback(ALT_event);
 				break;
 			}
 			case SDL_KEYUP:

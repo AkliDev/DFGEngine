@@ -24,6 +24,7 @@ target_include_directories(DFGEngine PRIVATE
 	Vendor/glm	
 	Vendor/stb_image
 	Vendor/freetype/include
+	Vendor/irrKlang/include
 )
 
 #External links
@@ -35,6 +36,5 @@ target_link_libraries(DFGEngine PRIVATE
 )
 
 target_compile_definitions(DFGEngine PRIVATE _CRT_SECURE_NO_WARNINGS)
-
 target_compile_definitions(DFGEngine PRIVATE $<$<CONFIG:DEBUG>:DFG_DEBUG>)
 target_compile_definitions(DFGEngine PRIVATE $<$<CONFIG:RELEASE>:DFG_RELEASE>)

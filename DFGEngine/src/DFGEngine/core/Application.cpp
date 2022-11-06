@@ -3,6 +3,7 @@
 #include "Application.h"
 
 #include "DFGEngine/Renderer/Renderer.h"
+#include "DFGEngine/Audio/SoundEngine.h"
 #include "DFGEngine/Core/KeyCodes.h"
 
 #include <SDL.h>
@@ -23,6 +24,7 @@ namespace DFGEngine
 		m_Window->SetVSync(false);
 
 		Renderer::Init();
+		SoundEngine::Init();
 	}
 
 	Application::~Application()
@@ -30,6 +32,7 @@ namespace DFGEngine
 		//DFG_PROFILE_FUNCTION();
 
 		Renderer::Shutdown();
+		SoundEngine::Shutdown();
 	}
 
 	void Application::Run()
@@ -42,14 +45,14 @@ namespace DFGEngine
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
+			m_Window->OnUpdate();
+
 			if (!m_Minimized)
 			{			
 				//DFG_PROFILE_SCOPE("LayerStack OnUpdate");
 
 				for (Layer* layer : m_LayerStack) { layer->OnUpdate(timestep); }
-			}
-
-			m_Window->OnUpdate();
+			}		
 		}
 	}
 

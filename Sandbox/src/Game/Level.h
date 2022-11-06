@@ -13,6 +13,8 @@ namespace DFGEngine
 		void Load(const char* file, float levelWidth, float levelHeight);
 		void OnRender();
 		void Reset();
+		
+		bool IsCompleted();
 
 		std::vector<Ref<Brick>>& GetBricks() { return m_Bricks; }	
 	private:
