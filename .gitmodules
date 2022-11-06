@@ -11,3 +11,6 @@
 [submodule "DFGEngine/Vendor/freetype"]
 	path = DFGEngine/Vendor/freetype
 	url = https://github.com/freetype/freetype.git
+[submodule "DFGEngine/Vendor/openal-soft"]
+	path = DFGEngine/Vendor/openal-soft
+	url = https://github.com/kcat/openal-soft.git
