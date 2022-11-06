@@ -24,7 +24,6 @@ target_include_directories(DFGEngine PRIVATE
 	Vendor/glm	
 	Vendor/stb_image
 	Vendor/freetype/include
-	Vendor/irrKlang/include
 )
 
 #External links
