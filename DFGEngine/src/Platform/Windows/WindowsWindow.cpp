@@ -59,7 +59,6 @@ namespace DFGEngine {
 		m_Context->Init();
 
 		SDL_SetWindowData(m_Window, "data", &m_Data);
-		SetVSync(false);
 	}
 
 	void WindowsWindow::Shutdown()
@@ -214,8 +213,17 @@ namespace DFGEngine {
 		m_Data.VSync = enabled;
 	}
 
-	bool WindowsWindow::IsVSync() const
+	void WindowsWindow::SetFullScreen(bool enabled)
 	{
-		return m_Data.VSync;
+		if (enabled) { SDL_SetWindowFullscreen(m_Window, SDL_WINDOW_FULLSCREEN_DESKTOP); }
+		else { SDL_SetWindowFullscreen(m_Window, 0); }
+		
+		m_Data.FullScreen = enabled;
+	}
+
+	void WindowsWindow::SetShowCursor(bool enabled)
+	{
+		SDL_ShowCursor(enabled);
+		m_Data.ShowCursor = enabled;
 	}
 }

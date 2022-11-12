@@ -17,8 +17,6 @@ namespace DFGEngine
 		virtual uint32_t GetHeight() const = 0;
 		virtual uint32_t GetRendererID() const = 0;
 
-		virtual const std::string& GetName() const = 0;
-
 		virtual void SetData(void* data, uint32_t size) = 0;
 
 		virtual void Bind(uint32_t slot = 0) const = 0;
@@ -37,8 +35,8 @@ namespace DFGEngine
 	class TextureLibrary
 	{
 	public:
+		~TextureLibrary();
 		void Add(const std::string& name, const Ref<Texture2D>& texture);
-		void Add(const Ref<Texture2D>& texture);
 		Ref<Texture2D> Load(const std::string& name, const std::string& filePath);
 
 		Ref<Texture2D> Get(const std::string& name);

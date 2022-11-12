@@ -19,7 +19,6 @@ namespace DFGEngine
 		virtual uint32_t GetWidth() const override { return m_Width; }
 		virtual uint32_t GetHeight() const override { return m_Height; }
 		virtual uint32_t GetRendererID() const override { return m_RendererID; }
-		virtual const std::string& GetName() const override { return m_Path; };
 
 		virtual void SetData(void* data, uint32_t size) override;
 	
@@ -33,7 +32,6 @@ namespace DFGEngine
 		void InvalidateTextureID() { DFG_CORE_TRACE("Invalidated textureID {0}", m_RendererID); m_RendererID = 0; };
 	
 	private:
-		std::string m_Name;
 		std::string m_Path;
 		uint32_t m_Width, m_Height;
 		uint32_t m_RendererID;

@@ -21,7 +21,21 @@ namespace DFGEngine
 		fbSpec.Height = m_ViewportHeight;
 		m_Framebuffer = FrameBuffer::Create(fbSpec);
 
-		m_EditorCamera = EditorCamera(120.0f, 1.77777777778f, 0.1f, 1000.0f);
+		m_EditorCamera = EditorCamera(45.0f, 1.77777777778f, 0.1f, 1000.0f);
+		m_GameCamera = GameCamera(90.0f, 1.77777777778f, 0.1f, 1000.0f);
+
+		//load audio
+		SoundEngine::LoadSFX("protector","assets/audio/sfx/iamtheprotectorofthissystem.wav");
+		SoundEngine::LoadSFX("solid", "assets/audio/sfx/solid.wav");
+		SoundEngine::LoadSFX("bloop", "assets/audio/sfx/bloop.wav");
+		SoundEngine::LoadSFX("bleep", "assets/audio/sfx/bleep.wav");
+		SoundEngine::LoadSFX("powerup", "assets/audio/sfx/powerup.wav");
+
+		SoundEngine::LoadMusic("BGM1", "assets/audio/bgm/Juhani Junkala [Retro Game Music Pack] Title Screen.wav");
+		SoundEngine::LoadMusic("BGM2", "assets/audio/bgm/Juhani Junkala [Retro Game Music Pack] Level 1.wav");
+		SoundEngine::LoadMusic("BGM3", "assets/audio/bgm/Juhani Junkala [Retro Game Music Pack] Level 2.wav");
+		SoundEngine::LoadMusic("BGM4", "assets/audio/bgm/Juhani Junkala [Retro Game Music Pack] Level 3.wav");
+		SoundEngine::LoadMusic("BGM5", "assets/audio/bgm/Juhani Junkala [Retro Game Music Pack] Ending.wav");
 
 		//load textures
 		Renderer2D::s_TextureLibrary.Load("sky_top", "assets/textures/lightblue/top.png");
@@ -35,13 +49,7 @@ namespace DFGEngine
 		Renderer2D::s_TextureLibrary.Load("block", "assets/textures/block.png");
 		Renderer2D::s_TextureLibrary.Load("block_solid", "assets/textures/block_solid.png");
 		Renderer2D::s_TextureLibrary.Load("paddle", "assets/textures/paddle.png");
-		Renderer2D::s_TextureLibrary.Load("particle", "assets/textures/particle.png");
-		Renderer2D::s_TextureLibrary.Load("powerup_speed", "assets/textures/powerup_speed.png");
-		Renderer2D::s_TextureLibrary.Load("powerup_sticky", "assets/textures/powerup_sticky.png");
-		Renderer2D::s_TextureLibrary.Load("powerup_increase", "assets/textures/powerup_increase.png");
-		Renderer2D::s_TextureLibrary.Load("powerup_confuse", "assets/textures/powerup_confuse.png");
-		Renderer2D::s_TextureLibrary.Load("powerup_chaos", "assets/textures/powerup_chaos.png");
-		Renderer2D::s_TextureLibrary.Load("powerup_passthrough", "assets/textures/powerup_passthrough.png");
+		//Renderer2D::s_TextureLibrary.Load("particle", "assets/textures/particle.png");
 
 		// Load levels
 		Level one; one.Load("assets/levels/one.lvl", m_LevelWitdh, m_LevelHeight * 0.5);
@@ -65,7 +73,12 @@ namespace DFGEngine
 		pos = m_Paddle->GetTransformComponent().Translation;
 		pos.y += (m_Paddle->GetTransformComponent().Scale.y * 0.5f) + (ballRadius);
 		m_Ball = CreateRef<Ball>(pos, ballRadius, Renderer2D::s_TextureLibrary.Get("face"));
-		m_Ball->Init(m_Paddle, m_LevelWitdh, m_LevelHeight, 10);
+		m_Ball->Init(m_Paddle, m_LevelWitdh, m_LevelHeight, 15);
+
+		m_Tracker = CreateRef<Entity>(glm::vec3(m_LevelWitdh * 0.5f,-2 + m_LevelHeight * 0.5f + 2.0f, 0.0f));
+		m_GameCamera.SetLookatTarget(m_Tracker);
+		SoundEngine::PlayMusic("BGM5");
+		SoundEngine::PlaySFX("protector");
 	}
 
 	void Sandbox2D::OnDetach()
@@ -85,7 +98,13 @@ namespace DFGEngine
 					if (!brick->IsSolid())
 					{
 						brick->Destroyed(true);
+						SoundEngine::PlaySFX("bleep");
 					}
+					else
+					{
+						SoundEngine::PlaySFX("solid");
+					}
+
 					// collision resolution
 					Direction dir = std::get<1>(collision);
 					glm::vec2 diff_vector = std::get<2>(collision);
@@ -114,23 +133,28 @@ namespace DFGEngine
 		}
 
 		Collision result = CheckCollision(m_Ball, m_Paddle);
-		if (m_Ball->IsStuck() == false && std::get<0>(result))
+		if (m_Ball->IsStuck() == false && std::get<0>(result) && m_Ball->GetPhysicsComponent().Velocity.y < 0)
 		{
 			// check where it hit the board, and change velocity based on where it hit the board
 			float distance = (m_Ball->GetTransformComponent().Translation.x + m_Ball->GetRadius()) - m_Paddle->GetTransformComponent().Translation.x;
 			float percentage = distance / (m_Paddle->GetTransformComponent().Scale.x);
 			// then move accordingly
-			float strength = 2.0f;
+			float strength = 3.0f;
 			glm::vec2 oldVelocity = m_Ball->GetPhysicsComponent().Velocity;
 			m_Ball->GetPhysicsComponent().Velocity.x = m_Ball->m_GetBaseSpeed() * percentage * strength;
 			m_Ball->GetPhysicsComponent().Velocity = glm::normalize(m_Ball->GetPhysicsComponent().Velocity) * glm::length(oldVelocity);
 			m_Ball->GetPhysicsComponent().Velocity.y = 1.0f * abs(m_Ball->GetPhysicsComponent().Velocity.y);
+			SoundEngine::PlaySFX("bloop");
 		}
 	}
 
 	void Sandbox2D::ResetLevel()
 	{
+		m_Lives = 3;
+		m_GameCamera.SetLookatTarget(m_Tracker);
+		m_GameCamera.SetFOV(90.0f);
 		m_Levels[m_CurrentLevel].Reset();
+		SoundEngine::PlayMusic("BGM5");
 	}
 
 	void Sandbox2D::ResetPlayer()
@@ -144,9 +168,6 @@ namespace DFGEngine
 	{		
 		if (m_GameState == GAME_ACTIVE)
 		{
-			m_Paddle->OnUpdate(ts);
-			m_Ball->OnUpdate(ts);
-			DetectCollisions();
 			// check loss condition
 			if (m_Ball->GetTransformComponent().Translation.y < -4)
 			{
@@ -154,11 +175,11 @@ namespace DFGEngine
 				if (m_Lives == 0)
 				{
 					ResetLevel();
-					m_Lives = 3;
 					m_GameState = GAME_MENU;
 				}
 				ResetPlayer();
 				m_Lives--;
+				SoundEngine::PlaySFX("powerup");
 			}
 			// check win condition
 			if (m_Levels[m_CurrentLevel].IsCompleted())
@@ -166,38 +187,51 @@ namespace DFGEngine
 				ResetLevel();
 				ResetPlayer();
 				m_GameState = GAME_WIN;
+				SoundEngine::PlaySFX("powerup");
 			}
-		}
-		m_EditorCamera.OnUpdate(ts);
 
-		OnRender();
+			m_Paddle->OnUpdate(ts);
+			m_Ball->OnUpdate(ts);
+			DetectCollisions();
+		}
+		else if (m_GameState == GAME_MENU || m_GameState == GAME_WIN)
+		{
+			float radius = 10;
+			static float value = 0;	
+			value += 0.4f * ts;
+			m_GameCamera.SetPosition(m_LevelWitdh * 0.5f + glm::vec3(sin(value) * radius,-5 + m_LevelHeight * 0.5f + cos(value) * radius, 0.0f));
+		}
+
+		m_EditorCamera.OnUpdate(ts);
+		m_GameCamera.OnUpdate(ts);
+		OnRender(m_GameCamera);
 	}
 
-	void Sandbox2D::RenderSky()
+	void Sandbox2D::RenderSky(ProjectionCamera& camera)
 	{
-		// My engine can only render quads. I am too lazy to design an API for cubemaps. 
+		// My engine can only render quads. I am too lazy to design an API for cubemaps lol. W
 		float boxScale = 10.0f;
 		RenderCommand::EnableDepthMask(false);
-		Renderer2D::BeginScene(m_EditorCamera);
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, boxScale * 0.5f, 0.0f), glm::vec2(boxScale), glm::vec3(glm::radians(90.0f), 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_top"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, boxScale * -0.5f, 0.0f), glm::vec2(boxScale), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_bottom"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(boxScale * -0.5f, 0.0f, 0.0f), glm::vec2(boxScale), glm::vec3(0.0f, glm::radians(90.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_left"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(boxScale * 0.5f, 0.0f, 0.0f), glm::vec2(boxScale), glm::vec3(0.0f, glm::radians(-90.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_right"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, 0.0f, boxScale * -0.5f), glm::vec2(boxScale), glm::vec3(0.0f, 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_front"));
-		Renderer2D::DrawRotatedQuad(m_EditorCamera.GetPosition() + glm::vec3(0.0f, 0.0f, boxScale * 0.5f), glm::vec2(boxScale), glm::vec3(0.0f, glm::radians(-180.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_back"));
+		Renderer2D::BeginScene(camera);
+		Renderer2D::DrawRotatedQuad(camera.GetPosition() + glm::vec3(0.0f, boxScale * 0.5f, 0.0f), glm::vec2(boxScale), glm::vec3(glm::radians(90.0f), 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_top"));
+		Renderer2D::DrawRotatedQuad(camera.GetPosition() + glm::vec3(0.0f, boxScale * -0.5f, 0.0f), glm::vec2(boxScale), glm::vec3(glm::radians(-90.0f), 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_bottom"));
+		Renderer2D::DrawRotatedQuad(camera.GetPosition() + glm::vec3(boxScale * -0.5f, 0.0f, 0.0f), glm::vec2(boxScale), glm::vec3(0.0f, glm::radians(90.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_left"));
+		Renderer2D::DrawRotatedQuad(camera.GetPosition() + glm::vec3(boxScale * 0.5f, 0.0f, 0.0f), glm::vec2(boxScale), glm::vec3(0.0f, glm::radians(-90.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_right"));
+		Renderer2D::DrawRotatedQuad(camera.GetPosition() + glm::vec3(0.0f, 0.0f, boxScale * -0.5f), glm::vec2(boxScale), glm::vec3(0.0f, 0.0f, 0.0f), Renderer2D::s_TextureLibrary.Get("sky_front"));
+		Renderer2D::DrawRotatedQuad(camera.GetPosition() + glm::vec3(0.0f, 0.0f, boxScale * 0.5f), glm::vec2(boxScale), glm::vec3(0.0f, glm::radians(-180.0f), 0.0f), Renderer2D::s_TextureLibrary.Get("sky_back"));
 		Renderer2D::EndScene();
 		RenderCommand::EnableDepthMask(true);
 	}
 
-	void Sandbox2D::OnRender()
+	void Sandbox2D::OnRender(ProjectionCamera& camera)
 	{
 		Renderer2D::ResetStats();
 
 		m_Framebuffer->Bind();
 		RenderCommand::SetClearColor({ 0.1f, 0.1f, 0.1f, 1.0f });
 		RenderCommand::Clear();
-		RenderSky();
-		Renderer2D::BeginScene(m_EditorCamera);
+		RenderSky(camera);
+		Renderer2D::BeginScene(camera);
 		m_Levels[m_CurrentLevel].OnRender();
 		m_Paddle->OnRender();
 		m_Ball->OnRender();
@@ -258,23 +292,45 @@ namespace DFGEngine
 
 		if (m_GameState == GAME_MENU)
 		{
-			if (e.GetKeyCode() == Key::KEY_RETURN) m_GameState = GAME_ACTIVE;
+			if (e.GetKeyCode() == Key::KEY_RETURN)
+			{
+				m_GameCamera.SetFOV(47.0f);
+				m_GameCamera.SetPosition(glm::vec3(m_LevelWitdh * 0.5f, -3, 17.0f));
+				m_GameCamera.SetRotation(glm::vec3(0.57f, 0.0f, 0.0f));
+				m_GameCamera.SetLookatTarget(nullptr);
+
+				switch (m_CurrentLevel)
+				{
+				case 0: SoundEngine::PlayMusic("BGM1"); break;
+				case 1: SoundEngine::PlayMusic("BGM2"); break;
+				case 2: SoundEngine::PlayMusic("BGM3"); break;
+				case 3: SoundEngine::PlayMusic("BGM4"); break;
+				}
+				
+				m_GameState = GAME_ACTIVE;
+			}
 			if (e.GetKeyCode() == Key::KEY_D) m_CurrentLevel = (m_CurrentLevel + 1) % 4;;
 			if (e.GetKeyCode() == Key::KEY_A) m_CurrentLevel = (m_CurrentLevel - 1) % 4;;
 		}
 
 		if (m_GameState == GAME_WIN)
-		{
-			if (e.GetKeyCode() == Key::KEY_RETURN) m_GameState = GAME_MENU;
-		}		
+		{		
+			if (e.GetKeyCode() == Key::KEY_RETURN)
+			{
+				m_GameState = GAME_MENU;
+			}
+		}	
+		return false;
 	}
 
 	bool Sandbox2D::OnWindowResized(WindowResizeEvent& e)
 	{
 		m_ViewportWidth = e.GetWidth();
 		m_ViewportHeight = e.GetHeight();
+
 		m_Framebuffer->Resize(e.GetWidth(), e.GetHeight());
 		m_EditorCamera.SetViewportSize(e.GetWidth(), e.GetHeight());
+		m_GameCamera.SetViewportSize(e.GetWidth(), e.GetHeight());
 		return false;
 	}
 }

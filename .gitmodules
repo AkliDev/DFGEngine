@@ -14,3 +14,6 @@
 [submodule "DFGEngine/Vendor/openal-soft"]
 	path = DFGEngine/Vendor/openal-soft
 	url = https://github.com/kcat/openal-soft.git
+[submodule "DFGEngine/Vendor/libsndfile"]
+	path = DFGEngine/Vendor/libsndfile
+	url = https://github.com/libsndfile/libsndfile.git

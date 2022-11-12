@@ -10,7 +10,7 @@ namespace DFGEngine
 		Paddle() = default;
 		Paddle(glm::vec3 pos, glm::vec3 scale, Ref<Texture2D> sprite, glm::vec4 color = glm::vec4(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f));
 	
-		void OnUpdate(Timestep ts) override;
+		virtual void OnUpdate(Timestep ts) override;
 		void Init(float horizonatalBound, float speed);
 		void Reset();
 

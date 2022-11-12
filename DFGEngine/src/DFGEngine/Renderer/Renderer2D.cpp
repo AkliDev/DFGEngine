@@ -177,7 +177,7 @@ namespace DFGEngine
 	}
 
 
-	void Renderer2D::BeginScene(const EditorCamera& camera)
+	void Renderer2D::BeginScene(const ProjectionCamera& camera)
 	{
 		//DFG_PROFILE_FUNCTION();
 		s_Data.CameraBuffer.ViewProjection = camera.GetViewProjection();
@@ -185,7 +185,6 @@ namespace DFGEngine
 
 		StartBatch();
 	}
-
 
 	void Renderer2D::BeginScene(const glm::mat4& transform)
 	{

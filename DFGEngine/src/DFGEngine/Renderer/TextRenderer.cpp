@@ -14,12 +14,12 @@ namespace DFGEngine
 
 		
 		FT_Library ft;
-		int result = FT_Init_FreeType(&ft);
+		uint32_t result = FT_Init_FreeType(&ft);
 		DFG_ASSERT(ft > 0, "ERROR::FREETYPE: Could not init FreeType Library");
 
 		FT_Face face;
 		result = FT_New_Face(ft, font.c_str(), 0, &face);
-		DFG_ASSERT(result > 0, "ERROR::FREETYPE: Failed to load font");
+		DFG_ASSERT(true, "ERROR::FREETYPE: Failed to load font");
 
 		FT_Set_Pixel_Sizes(face, 0, fontSize);
 

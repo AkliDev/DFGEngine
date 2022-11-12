@@ -18,20 +18,24 @@ set_target_properties( DFGEngine PROPERTIES ARCHIVE_OUTPUT_DIRECTORY_RELEASE ${C
 #External includes
 target_include_directories(DFGEngine PRIVATE
 	src
-	Vendor/spdlog/include
-	Vendor/SDL/include
+	Vendor/freetype/include	
 	Vendor/Glad/include
 	Vendor/glm	
+	Vendor/SDL/include
+	Vendor/spdlog/include
 	Vendor/stb_image
-	Vendor/freetype/include
+	Vendor/openal-soft/include	
+	Vendor/libsndfile/include	
 )
 
 #External links
 target_link_libraries(DFGEngine PRIVATE
+	freetype
 	glad::glad
 	SDL2::SDL2 
-	SDL2::SDL2main
-	freetype
+	SDL2::SDL2main	
+	OpenAL::OpenAL
+	SndFile::sndfile
 )
 
 target_compile_definitions(DFGEngine PRIVATE _CRT_SECURE_NO_WARNINGS)

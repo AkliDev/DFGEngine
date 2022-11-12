@@ -21,7 +21,9 @@ namespace DFGEngine
 
 		m_Window = Window::Create(WindowProps(name));
 		m_Window->SetEventCallback(DFG_BIND_EVENT_FN(Application::OnEvent));
-		m_Window->SetVSync(false);
+		m_Window->SetVSync(true);
+		m_Window->SetFullScreen(true);
+		m_Window->SetShowCursor(false);
 
 		Renderer::Init();
 		SoundEngine::Init();
@@ -52,6 +54,7 @@ namespace DFGEngine
 				//DFG_PROFILE_SCOPE("LayerStack OnUpdate");
 
 				for (Layer* layer : m_LayerStack) { layer->OnUpdate(timestep); }
+				SoundEngine::Update();
 			}		
 		}
 	}
@@ -98,6 +101,7 @@ namespace DFGEngine
 
 	bool Application::OnKeyPressedEvent(KeyPressedEvent& e)
 	{
+		if (e.GetKeyCode() == Key::KEY_F11) { m_Window->SetFullScreen(!m_Window->IsFullScreen()); }
 		if (e.GetKeyCode() == Key::KEY_ESCAPE) { Close(); }
 		return false;
 	}

@@ -52,7 +52,7 @@ namespace DFGEngine
 	{
 	public:
 		Entity() {};
-		Entity(glm::vec3 pos, glm::vec3 scale, Ref<Texture2D> sprite, glm::vec4 color = glm::vec4(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f));
+		Entity(glm::vec3 pos, glm::vec3 scale = glm::vec3(1.0f), Ref<Texture2D> sprite = nullptr, glm::vec4 color = glm::vec4(1.0f), glm::vec2 velocity = glm::vec2(0.0f, 0.0f));
 		virtual void OnUpdate(Timestep ts);
 		virtual void OnRender();
 
