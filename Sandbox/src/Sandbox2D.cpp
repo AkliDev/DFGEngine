@@ -209,7 +209,7 @@ namespace DFGEngine
 
 	void Sandbox2D::RenderSky(ProjectionCamera& camera)
 	{
-		// My engine can only render quads. I am too lazy to design an API for cubemaps lol. W
+		//I'll do proper cubemaps later.
 		float boxScale = 10.0f;
 		RenderCommand::EnableDepthMask(false);
 		Renderer2D::BeginScene(camera);
