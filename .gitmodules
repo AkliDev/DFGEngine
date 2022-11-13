@@ -17,3 +17,6 @@
 [submodule "DFGEngine/Vendor/libsndfile"]
 	path = DFGEngine/Vendor/libsndfile
 	url = https://github.com/libsndfile/libsndfile.git
+[submodule "DFGEngine/Vendor/Lua"]
+	path = DFGEngine/Vendor/Lua
+	url = https://github.com/walterschell/Lua.git
