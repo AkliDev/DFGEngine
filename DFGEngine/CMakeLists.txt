@@ -26,6 +26,7 @@ target_include_directories(DFGEngine PRIVATE
 	Vendor/stb_image
 	Vendor/openal-soft/include	
 	Vendor/libsndfile/include	
+	Vendor/Lua/lua-5.4.4/include	
 )
 
 #External links
@@ -36,6 +37,7 @@ target_link_libraries(DFGEngine PRIVATE
 	SDL2::SDL2main	
 	OpenAL::OpenAL
 	SndFile::sndfile
+	lua_static
 )
 
 target_compile_definitions(DFGEngine PRIVATE _CRT_SECURE_NO_WARNINGS)

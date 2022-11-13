@@ -14,6 +14,7 @@ add_subdirectory(DFGEngine/vendor/Glad)
 add_subdirectory(DFGEngine/vendor/freetype)
 add_subdirectory(DFGEngine/vendor/openal-soft)
 add_subdirectory(DFGEngine/vendor/libsndfile)
+add_subdirectory(DFGEngine/vendor/Lua)
 
 set_target_properties(glad PROPERTIES FOLDER "Dependencies")
 set_target_properties(freetype PROPERTIES FOLDER "Dependencies")
@@ -33,6 +34,10 @@ set_target_properties(common PROPERTIES FOLDER "Dependencies/OpenAL")
 set_target_properties(ex-common PROPERTIES FOLDER "Dependencies/OpenAL")
 set_target_properties(openal-info PROPERTIES FOLDER "Dependencies/OpenAL")
 set_target_properties(altonegen PROPERTIES FOLDER "Dependencies/OpenAL")
+
+set_target_properties(lua_shared PROPERTIES FOLDER "Dependencies/Lua")
+set_target_properties(lua_static PROPERTIES FOLDER "Dependencies/Lua")
+set_target_properties(luac PROPERTIES FOLDER "Dependencies/Lua")
 
 add_subdirectory(DFGEngine)
 add_subdirectory(DFGEditor)

@@ -20,7 +20,7 @@ namespace DFGEngine
 		static void Update();
 
 	private:
-		const static uint32_t SFX_SOURCE_COUNT = 10;
+		const static uint32_t SFX_SOURCE_COUNT = 20;
 		static AudioDevice* s_SoundDevice;
 		static AudioSource* s_MusicSource;
 		static std::vector<AudioSource*> s_SFXSources;
