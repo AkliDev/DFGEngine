@@ -19,9 +19,9 @@ add_subdirectory(DFGEngine/vendor/Lua)
 set_target_properties(glad PROPERTIES FOLDER "Dependencies")
 set_target_properties(freetype PROPERTIES FOLDER "Dependencies")
 
-#set_target_properties(mpeg_test PROPERTIES FOLDER "Dependencies/libsndfile")
-#set_target_properties(ogg_opus_test PROPERTIES FOLDER "Dependencies/libsndfile")
-#set_target_properties(sndfile PROPERTIES FOLDER "Dependencies/libsndfile")
+set_target_properties(mpeg_test PROPERTIES FOLDER "Dependencies/libsndfile")
+set_target_properties(ogg_opus_test PROPERTIES FOLDER "Dependencies/libsndfile")
+set_target_properties(sndfile PROPERTIES FOLDER "Dependencies/libsndfile")
 
 set_target_properties(SDL2 PROPERTIES FOLDER "Dependencies/SDL2")
 set_target_properties(SDL2main PROPERTIES FOLDER "Dependencies/SDL2")

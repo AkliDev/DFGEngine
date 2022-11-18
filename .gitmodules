@@ -20,3 +20,6 @@
 [submodule "DFGEngine/Vendor/Lua"]
 	path = DFGEngine/Vendor/Lua
 	url = https://github.com/walterschell/Lua.git
+[submodule "DFGEngine/Vendor/rttr"]
+	path = DFGEngine/Vendor/rttr
+	url = https://github.com/rttrorg/rttr.git
