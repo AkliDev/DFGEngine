@@ -41,7 +41,7 @@ namespace DFGEngine
 
 		virtual bool IsVSync() const = 0;
 		virtual bool IsFullScreen() const = 0;
-		virtual bool IsCursorShown() const const = 0;
+		virtual bool IsCursorShown() const  = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 		virtual void* GetRenderContext() const = 0;

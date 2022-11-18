@@ -1,8 +1,26 @@
 #include "Sandbox2D.h"
 #include "Game/Utility.h"
 
+extern "C"
+{
+#include "lua.h"
+#include "lauxlib.h"
+#include "lualib.h"
+}
+
 namespace DFGEngine
 {
+	bool CheckLua(lua_State* L, uint32_t r)
+	{
+		if (r != LUA_OK)
+		{
+			std::string error = lua_tostring(L, -1);
+			DFG_ERROR(error);
+			return false;
+		}
+		return true;
+	}
+
 	Sandbox2D::Sandbox2D()
 		:Layer("Sandbox2D")
 	{
@@ -11,6 +29,71 @@ namespace DFGEngine
 	
 	void Sandbox2D::OnAttach()
 	{
+		{
+			struct Vector
+			{
+				static int32_t CreateVector2D(lua_State* L)
+				{
+					lua_newtable(L);
+					lua_pushstring(L, "x");
+					lua_pushnumber(L, 0);
+					lua_settable(L, -3);
+
+					lua_pushstring(L, "y");
+					lua_pushnumber(L, 0);
+					lua_settable(L, -3);
+
+					luaL_getmetatable(L, "Vector2DMetaTable");
+					lua_setmetatable(L, -2);
+
+					return 1;
+				}
+
+				static int __add(lua_State* L)
+				{
+					DFG_ASSERT(lua_istable(L, -2)); //left 
+					DFG_ASSERT(lua_istable(L, -1)); //right
+
+					lua_pushstring(L, "x");
+					lua_gettable(L, -3);
+					double xLeft = lua_tonumber(L, -1);
+					lua_pop(L, 1);
+
+					lua_pushstring(L, "x");
+					lua_gettable(L, -2);
+					double xRight = lua_tonumber(L, -1);
+					lua_pop(L, 1);
+
+					double newx = xLeft + xRight;
+					
+					CreateVector2D(L);
+					lua_pushstring(L, "x");
+					lua_pushnumber(L, newx);
+					lua_rawset(L, -3);
+					return 1;
+				}
+			};
+
+			lua_State* L = luaL_newstate();
+			luaL_openlibs(L);
+	
+			lua_pushcfunction(L, Vector::CreateVector2D);
+			lua_setglobal(L, "CreateVector2D");
+
+			luaL_newmetatable(L, "Vector2DMetaTable");
+			lua_pushstring(L, "__add");
+			lua_pushcfunction(L, Vector::__add);
+			lua_settable(L, -3);
+
+			if (CheckLua(L, luaL_dofile(L, "assets/scripts/test.lua")))
+			{
+				lua_getglobal(L, "result");
+				double x = lua_tonumber(L, -1);
+				DFG_TRACE(x);
+			}
+
+			lua_close(L);
+		}
 		m_ViewportWidth = Application::Get().GetWindow().GetWidth();
 		m_ViewportHeight = Application::Get().GetWindow().GetHeight();
 
