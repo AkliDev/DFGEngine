@@ -27,18 +27,18 @@ target_link_libraries(Sandbox PRIVATE
 	DFGEngine
 )
 
-#Figure our copy dir after each run not only build
-#add_custom_command(TARGET Sandbox PRE_BUILD 
-#    COMMAND ${CMAKE_COMMAND} -E copy_directory 
-#    ${CMAKE_CURRENT_LIST_DIR}/assets
-#    ${CMAKE_CURRENT_BINARY_DIR}/assets
-#)
+#TODO: Figure out how copy dir after each run not only build
+add_custom_command(TARGET Sandbox PRE_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_directory 
+    ${CMAKE_CURRENT_LIST_DIR}/assets
+    ${CMAKE_CURRENT_BINARY_DIR}/assets
+)
 
-#add_custom_command(TARGET Sandbox PRE_BUILD 
-#    COMMAND ${CMAKE_COMMAND} -E copy_directory 
-#    ${CMAKE_CURRENT_LIST_DIR}/assets
-#    $<TARGET_FILE_DIR:Sandbox>/assets
-#)
+add_custom_command(TARGET Sandbox PRE_BUILD 
+    COMMAND ${CMAKE_COMMAND} -E copy_directory 
+    ${CMAKE_CURRENT_LIST_DIR}/assets
+    $<TARGET_FILE_DIR:Sandbox>/assets
+)
 
 add_custom_command(TARGET Sandbox POST_BUILD 
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different

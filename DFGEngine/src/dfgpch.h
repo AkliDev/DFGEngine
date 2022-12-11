@@ -32,4 +32,7 @@
 
 #ifdef DFG_PLATFORM_WINDOWS
 	#include <Windows.h>
+	#ifdef DFG_RELEASE
+		#pragma comment(linker, "/SUBSYSTEM:windows /ENTRY:mainCRTStartup")
+	#endif
 #endif

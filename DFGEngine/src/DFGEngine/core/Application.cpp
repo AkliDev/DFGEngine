@@ -21,9 +21,11 @@ namespace DFGEngine
 
 		m_Window = Window::Create(WindowProps(name));
 		m_Window->SetEventCallback(DFG_BIND_EVENT_FN(Application::OnEvent));
-		m_Window->SetVSync(true);
-		m_Window->SetFullScreen(false);
+		m_Window->SetVSync(true);		
 		m_Window->SetShowCursor(false);
+		#ifdef DFG_RELEASE
+		m_Window->SetFullScreen(true);
+		#endif
 
 		Renderer::Init();
 		SoundEngine::Init();
