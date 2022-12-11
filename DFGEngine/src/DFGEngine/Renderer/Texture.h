@@ -1,7 +1,11 @@
 #pragma once
-
-#include <string>
 #include "DFGEngine/Core/Base.h"
+#include <string>
+#include <vector>
+
+#include <ft2build.h>
+#include FT_FREETYPE_H
+
 namespace DFGEngine
 {
 	class Texture
@@ -25,5 +29,20 @@ namespace DFGEngine
 	public:
 		static Ref<Texture2D> Create(const uint32_t width, const uint32_t height);
 		static Ref<Texture2D> Create(const std::string& path);
+		static Ref<Texture2D> Create(const FT_Face& face);
+	};
+
+	class TextureLibrary
+	{
+	public:
+		~TextureLibrary();
+		void Add(const std::string& name, const Ref<Texture2D>& texture);
+		Ref<Texture2D> Load(const std::string& name, const std::string& filePath);
+
+		Ref<Texture2D> Get(const std::string& name);
+
+		bool Exists(const std::string& name) const;
+	private:
+		std::unordered_map<std::string, Ref<Texture2D>> m_Textures;
 	};
 }

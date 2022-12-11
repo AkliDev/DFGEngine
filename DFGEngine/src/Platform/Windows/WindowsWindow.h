@@ -20,8 +20,14 @@ namespace DFGEngine {
 
 		// Window attributes
 		void SetEventCallback(const EventCallbackFn& callback) override { m_Data.EventCallback = callback; }
+
 		void SetVSync(bool enabled) override;
-		bool IsVSync() const override;
+		void SetFullScreen(bool enabled) override;
+		void SetShowCursor(bool enabled) override;
+
+		bool IsVSync() const override { return m_Data.VSync; };
+		bool IsFullScreen() const override { return m_Data.FullScreen; };
+		bool IsCursorShown() const override { return m_Data.ShowCursor; };
 
 		virtual void* GetNativeWindow() const { return m_Window; }
 		virtual void* GetRenderContext() const { return m_Context->GetRenderContext(); }
@@ -37,6 +43,8 @@ namespace DFGEngine {
 			std::string Title;
 			unsigned int Width = 0, Height = 0;
 			bool VSync = false;
+			bool FullScreen = false;
+			bool ShowCursor = false;
 
 			EventCallbackFn EventCallback;
 		};
@@ -45,6 +53,5 @@ namespace DFGEngine {
 
 		void HandleEvents();
 	};
-
 }
 

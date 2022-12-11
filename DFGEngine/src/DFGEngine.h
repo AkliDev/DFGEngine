@@ -17,6 +17,9 @@
 #include "DFGEngine/Renderer/Renderer2D.h"
 #include "DFGEngine/Renderer/RenderCommand.h"
 
+//Audios
+#include "DFGEngine/Audio/SoundEngine.h"
+
 #include "DFGEngine/Renderer/Buffer.h"
 #include "DFGEngine/Renderer/Shader.h"
 #include "DFGEngine/Renderer/FrameBuffer.h"

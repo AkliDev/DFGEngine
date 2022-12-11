@@ -34,8 +34,14 @@ namespace DFGEngine
 
 		// Window attributes
 		virtual void SetEventCallback(const EventCallbackFn& callback) = 0;
+
 		virtual void SetVSync(bool enabled) = 0;
+		virtual void SetFullScreen(bool enabled) = 0;
+		virtual void SetShowCursor(bool enabled) = 0;
+
 		virtual bool IsVSync() const = 0;
+		virtual bool IsFullScreen() const = 0;
+		virtual bool IsCursorShown() const  = 0;
 
 		virtual void* GetNativeWindow() const = 0;
 		virtual void* GetRenderContext() const = 0;

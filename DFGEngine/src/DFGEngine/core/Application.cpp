@@ -3,6 +3,7 @@
 #include "Application.h"
 
 #include "DFGEngine/Renderer/Renderer.h"
+#include "DFGEngine/Audio/SoundEngine.h"
 #include "DFGEngine/Core/KeyCodes.h"
 
 #include <SDL.h>
@@ -20,9 +21,14 @@ namespace DFGEngine
 
 		m_Window = Window::Create(WindowProps(name));
 		m_Window->SetEventCallback(DFG_BIND_EVENT_FN(Application::OnEvent));
-		m_Window->SetVSync(false);
+		m_Window->SetVSync(true);		
+		m_Window->SetShowCursor(false);
+		#ifdef DFG_RELEASE
+		m_Window->SetFullScreen(true);
+		#endif
 
 		Renderer::Init();
+		SoundEngine::Init();
 	}
 
 	Application::~Application()
@@ -30,6 +36,7 @@ namespace DFGEngine
 		//DFG_PROFILE_FUNCTION();
 
 		Renderer::Shutdown();
+		SoundEngine::Shutdown();
 	}
 
 	void Application::Run()
@@ -42,14 +49,15 @@ namespace DFGEngine
 			Timestep timestep = time - m_LastFrameTime;
 			m_LastFrameTime = time;
 
+			m_Window->OnUpdate();
+
 			if (!m_Minimized)
 			{			
 				//DFG_PROFILE_SCOPE("LayerStack OnUpdate");
 
 				for (Layer* layer : m_LayerStack) { layer->OnUpdate(timestep); }
-			}
-
-			m_Window->OnUpdate();
+				SoundEngine::Update();
+			}		
 		}
 	}
 
@@ -95,6 +103,7 @@ namespace DFGEngine
 
 	bool Application::OnKeyPressedEvent(KeyPressedEvent& e)
 	{
+		if (e.GetKeyCode() == Key::KEY_F11) { m_Window->SetFullScreen(!m_Window->IsFullScreen()); }
 		if (e.GetKeyCode() == Key::KEY_ESCAPE) { Close(); }
 		return false;
 	}

@@ -8,3 +8,18 @@
 [submodule "DFGEngine/Vendor/SDL"]
 	path = DFGEngine/Vendor/SDL
 	url = https://github.com/libsdl-org/SDL
+[submodule "DFGEngine/Vendor/freetype"]
+	path = DFGEngine/Vendor/freetype
+	url = https://github.com/freetype/freetype.git
+[submodule "DFGEngine/Vendor/openal-soft"]
+	path = DFGEngine/Vendor/openal-soft
+	url = https://github.com/kcat/openal-soft.git
+[submodule "DFGEngine/Vendor/libsndfile"]
+	path = DFGEngine/Vendor/libsndfile
+	url = https://github.com/libsndfile/libsndfile.git
+[submodule "DFGEngine/Vendor/Lua"]
+	path = DFGEngine/Vendor/Lua
+	url = https://github.com/walterschell/Lua.git
+[submodule "DFGEngine/Vendor/rttr"]
+	path = DFGEngine/Vendor/rttr
+	url = https://github.com/rttrorg/rttr.git

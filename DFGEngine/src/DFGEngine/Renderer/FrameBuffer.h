@@ -46,7 +46,7 @@ namespace DFGEngine
 		uint32_t Height = 0;		
 		uint32_t Samples = 1;
 
-		FramebufferAttachmentSpecification Attachments;
+		FramebufferAttachmentSpecification AttachmentSpecification;
 
 		bool SwapChainTarget = false;
 	};
