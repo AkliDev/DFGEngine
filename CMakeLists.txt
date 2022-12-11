@@ -15,6 +15,7 @@ add_subdirectory(DFGEngine/vendor/freetype)
 add_subdirectory(DFGEngine/vendor/openal-soft)
 add_subdirectory(DFGEngine/vendor/libsndfile)
 add_subdirectory(DFGEngine/vendor/Lua)
+add_subdirectory(DFGEngine/vendor/rttr)
 
 set_target_properties(glad PROPERTIES FOLDER "Dependencies")
 set_target_properties(freetype PROPERTIES FOLDER "Dependencies")
@@ -28,16 +29,15 @@ set_target_properties(SDL2main PROPERTIES FOLDER "Dependencies/SDL2")
 set_target_properties(SDL2-static PROPERTIES FOLDER "Dependencies/SDL2")
 
 set_target_properties(OpenAL PROPERTIES FOLDER "Dependencies/OpenAL")
-set_target_properties(alrecord PROPERTIES FOLDER "Dependencies/OpenAL")
 set_target_properties(build_version PROPERTIES FOLDER "Dependencies/OpenAL")
 set_target_properties(common PROPERTIES FOLDER "Dependencies/OpenAL")
 set_target_properties(ex-common PROPERTIES FOLDER "Dependencies/OpenAL")
-set_target_properties(openal-info PROPERTIES FOLDER "Dependencies/OpenAL")
-set_target_properties(altonegen PROPERTIES FOLDER "Dependencies/OpenAL")
 
 set_target_properties(lua_shared PROPERTIES FOLDER "Dependencies/Lua")
 set_target_properties(lua_static PROPERTIES FOLDER "Dependencies/Lua")
 set_target_properties(luac PROPERTIES FOLDER "Dependencies/Lua")
+
+set_target_properties(rttr_core_lib PROPERTIES FOLDER "Dependencies")
 
 add_subdirectory(DFGEngine)
 add_subdirectory(DFGEditor)

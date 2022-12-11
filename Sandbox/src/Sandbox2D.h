@@ -9,6 +9,9 @@
 #include "Game/Paddle.h"
 #include "Game/Ball.h"
 
+#include "LuaBinding.h"
+#include "TestRegistration.h"
+
 namespace DFGEngine
 {
 	class Sandbox2D : public Layer

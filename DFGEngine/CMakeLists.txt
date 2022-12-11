@@ -38,6 +38,7 @@ target_link_libraries(DFGEngine PRIVATE
 	OpenAL::OpenAL
 	SndFile::sndfile
 	lua_static
+	RTTR::Core_Lib
 )
 
 target_compile_definitions(DFGEngine PRIVATE _CRT_SECURE_NO_WARNINGS)
