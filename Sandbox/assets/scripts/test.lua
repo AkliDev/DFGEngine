@@ -1,3 +1,2 @@
-function Ptras(a, b)
-    return a;
-end
+obj = Object.new()
+obj:OnRender();

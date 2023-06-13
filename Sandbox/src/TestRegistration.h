@@ -12,9 +12,10 @@ namespace DFGEngine
 	public:
 		Object() {}
 		~Object() {}
-		virtual void OnRender()
+		virtual int32_t OnRender(int32_t x, int32_t y, int32_t w, int32_t h)
 		{
-			Renderer2D::DrawQuad(m_Position, { 1,1 }, Renderer2D::s_TextureLibrary.Get("face"));
+			Renderer2D::DrawQuad({x,y}, { w,h }, Renderer2D::s_TextureLibrary.Get("face"));
+			return x + y;
 		}
 	public:
 		glm::vec2 m_Position{0};
