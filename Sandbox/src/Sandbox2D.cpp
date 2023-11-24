@@ -65,8 +65,14 @@ namespace DFGEngine
 		//Create player
 		glm::vec3 scale{ 4.0f,0.5f,1.0f };
 		glm::vec3 pos{ m_LevelWitdh * 0.5f, scale.y * 0.5f, 0.0f };
-		m_Paddle = CreateRef<Paddle>(pos, scale, Renderer2D::s_TextureLibrary.Get("paddle"));
+		m_Paddle = CreateRef<Paddle>(pos, glm::vec3(1, 1, 1), Renderer2D::s_TextureLibrary.Get("paddle"));
 		m_Paddle->Init(m_LevelWitdh, 20);
+
+		m_Brick = CreateRef<Brick>(glm::vec3(0,3,0), glm::vec3(1,1,1), Renderer2D::s_TextureLibrary.Get("block"), glm::vec4(1,1,1,1));
+		m_Brick->SetParant(m_Paddle);
+
+		m_Brick2 = CreateRef<Brick>(glm::vec3(3, 0, 0), glm::vec3(1, 1, 1), Renderer2D::s_TextureLibrary.Get("block"), glm::vec4(1, 1, 1, 1));
+		m_Brick2->SetParant(m_Brick);
 		
 		//Create ball
 		float ballRadius = 0.5f;
@@ -166,6 +172,7 @@ namespace DFGEngine
 
 	void Sandbox2D::OnUpdate(Timestep ts)
 	{		
+		m_Paddle->OnUpdate(ts);
 		if (m_GameState == GAME_ACTIVE)
 		{
 			// check loss condition
@@ -233,8 +240,11 @@ namespace DFGEngine
 		RenderSky(camera);
 		Renderer2D::BeginScene(camera);
 		m_Levels[m_CurrentLevel].OnRender();
+		m_Brick->OnRender();
+		m_Brick2->OnRender();
 		m_Paddle->OnRender();
 		m_Ball->OnRender();
+		
 		if (Input::IsKeyPressed(Key::KEY_L)) { LuaBinding(); }
 		Renderer2D::EndScene();	
 		m_Framebuffer->Unbind();

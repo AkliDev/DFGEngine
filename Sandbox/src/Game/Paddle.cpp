@@ -26,12 +26,15 @@ namespace DFGEngine
 	{
 		if(Input::IsKeyPressed(Key::KEY_A)) { GetPhysicsComponent().Velocity.x -= m_CurrentSpeed; }
 		if(Input::IsKeyPressed(Key::KEY_D)) { GetPhysicsComponent().Velocity.x += m_CurrentSpeed; }
+		if (Input::IsKeyPressed(Key::KEY_Q)) { GetPhysicsComponent().AngularVelocity = m_CurrentSpeed * .5f; }
+		if (Input::IsKeyPressed(Key::KEY_E)) { GetPhysicsComponent().AngularVelocity = -m_CurrentSpeed * .5f; }
 	}
 
 	void Paddle::OnUpdate(Timestep ts)
 	{			
 		//Reset horizontal speed
 		GetPhysicsComponent().Velocity.x = 0; 
+		GetPhysicsComponent().AngularVelocity = 0;
 		HandleInput();	
 		Entity::OnUpdate(ts);
 		//Clamp horizontal position to level bounds

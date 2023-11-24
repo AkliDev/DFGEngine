@@ -60,6 +60,8 @@ namespace DFGEngine
 		Ref<Entity> m_Tracker;
 		Ref<Paddle> m_Paddle;
 		Ref<Ball> m_Ball;
+		Ref<Brick> m_Brick;
+		Ref<Brick> m_Brick2;
 		uint32_t m_Lives = 2;
 	};
 }

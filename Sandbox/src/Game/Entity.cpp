@@ -21,10 +21,12 @@ namespace DFGEngine
 		//Apply Velocity to position
 		GetTransformComponent().Translation.x += GetPhysicsComponent().Velocity.x * ts;
 		GetTransformComponent().Translation.y += GetPhysicsComponent().Velocity.y * ts;
+		////Apply AngularVelocity to Rotation
+		GetTransformComponent().Rotation.z += GetPhysicsComponent().AngularVelocity * ts;
 	}
 
 	void Entity::OnRender()
 	{
-		Renderer2D::DrawQuad({GetTransformComponent().GetTransform()}, GetSpiteRendererComponent().Texture);
+		Renderer2D::DrawQuad({ GetTransform() }, GetSpiteRendererComponent().Texture);
 	}
 }
