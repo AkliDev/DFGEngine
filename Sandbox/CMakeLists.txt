@@ -17,6 +17,7 @@ target_include_directories(Sandbox PRIVATE
 	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/freetype/include	
 	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/glm
 	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/spdlog/include
+	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/nbnet
 	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/Lua/lua-5.4.4/include	
 	${CMAKE_BINARY_DIR}/DFGEngine/Vendor/rttr/src/rttr/..
 	${CMAKE_SOURCE_DIR}/DFGEngine/Vendor/rttr/src/rttr/..

@@ -43,14 +43,14 @@ namespace DFGEngine
 	
 	Ref<Shader> ShaderLibrary::Load(const std::string& filePath)
 	{
-		auto& shader = Shader::Create(filePath);
+		Ref<Shader> shader = Shader::Create(filePath);
 		Add(shader);
 		return shader;
 	}
 
 	Ref<Shader> ShaderLibrary::Load(const std::string& name, const std::string& filePath)
 	{
-		auto& shader = Shader::Create(filePath);
+		Ref<Shader> shader = Shader::Create(filePath);
 		Add(name, shader);
 		return shader;
 	}

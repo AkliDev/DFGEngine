@@ -22,6 +22,7 @@ namespace DFGEngine
 		// pre-compiles a list of characters from the given font
 		void Load(const std::string& font, uint32_t fontSize);
 		// renders a string of text using the pre-compiled list of characters
-		void DrawText(const std::string& text, glm::vec3 position, float scale, glm::vec4 color = glm::vec4(1.0f));
+		void DrawText(const std::string& text, glm::vec2 position, float scale = 0.4f, glm::vec4 color = glm::vec4(1.0f));
+		void DrawText(const std::string& text, glm::vec3 position, float scale = 0.4f, glm::vec4 color = glm::vec4(1.0f));
 	};
 }

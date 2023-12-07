@@ -57,7 +57,7 @@ namespace DFGEngine
 
 	Ref<Texture2D> TextureLibrary::Load(const std::string& name, const std::string& filePath)
 	{
-		auto& texture = Texture2D::Create(filePath);
+		Ref<Texture2D> texture = Texture2D::Create(filePath);
 		Add(name, texture);
 		return texture;
 	}

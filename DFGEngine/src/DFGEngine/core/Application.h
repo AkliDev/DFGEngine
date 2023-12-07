@@ -46,7 +46,6 @@ namespace DFGEngine
 		bool m_Running = true;
 		bool m_Minimized = false;
 		LayerStack m_LayerStack;
-		uint32_t  m_LastFrameTime = 0;
 
 	private:
 		static Application* s_instance;

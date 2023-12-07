@@ -6,10 +6,13 @@
 #include "DFGEngine/Audio/SoundEngine.h"
 #include "DFGEngine/Core/KeyCodes.h"
 
-#include <SDL.h>
+#include "DFGEngine/Utils/PlatformUtils.h"
 
 namespace DFGEngine
 {
+	const int SCREEN_FPS = 60;
+	const int SCREEN_TICK_PER_FRAME = 1000 / SCREEN_FPS;
+
 	Application* Application::s_instance = nullptr;
 
 	Application::Application(const std::string& name)
@@ -21,7 +24,7 @@ namespace DFGEngine
 
 		m_Window = Window::Create(WindowProps(name));
 		m_Window->SetEventCallback(DFG_BIND_EVENT_FN(Application::OnEvent));
-		m_Window->SetVSync(true);		
+		m_Window->SetVSync(false);		
 		m_Window->SetShowCursor(false);
 		#ifdef DFG_RELEASE
 		m_Window->SetFullScreen(true);
@@ -42,22 +45,44 @@ namespace DFGEngine
 	void Application::Run()
 	{
 		//DFG_PROFILE_FUNCTION();
+		LTimer fpsTimer;
+		LTimer capTimer;
+		fpsTimer.start();
+		uint32_t lastFrameTime = 0.0f;
+		uint32_t countedFrames = 0;
+
 		while (m_Running)
 		{
+			//Calculate and correct fps
+			float avgFPS = countedFrames / (fpsTimer.getTicks() / 1000.f);
+			if (avgFPS > 2000000)
+			{
+				avgFPS = 0;
+			}
+
 			//DFG_PROFILE_SCOPE("RunLoop");
-			uint32_t  time = SDL_GetTicks(); // TODO make platform independent 
-			Timestep timestep = time - m_LastFrameTime;
-			m_LastFrameTime = time;
+			uint32_t time = Time::GetTime();
+			Timestep timestep = time - lastFrameTime;
+			lastFrameTime = time;
 
 			m_Window->OnUpdate();
 
-			if (!m_Minimized)
-			{			
+			//if (!m_Minimized)
+			{
 				//DFG_PROFILE_SCOPE("LayerStack OnUpdate");
 
 				for (Layer* layer : m_LayerStack) { layer->OnUpdate(timestep); }
 				SoundEngine::Update();
-			}		
+				countedFrames++;
+			}
+
+			//If frame finished early
+			int frameTicks = capTimer.getTicks();
+			if (frameTicks < SCREEN_TICK_PER_FRAME)
+			{
+				//Wait remaining time
+				std::this_thread::sleep_for(std::chrono::milliseconds(SCREEN_TICK_PER_FRAME - frameTicks));
+			}
 		}
 	}
 

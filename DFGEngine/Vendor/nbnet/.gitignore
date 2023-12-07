@@ -1,0 +1,15 @@
+soak/build
+soak/build_web
+tests/build
+examples/raylib/build
+examples/raylib/build_web
+examples/echo/client
+examples/echo/server
+examples/echo_bytes/client
+examples/echo_bytes/server
+examples/echo/*.js
+examples/echo/*.wasm
+.vscode
+.ccls
+**/node_modules
+.idea

@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.22)
 # set the project name
 project(DFGEngine VERSION 0.1)
 
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 set_property(GLOBAL PROPERTY USE_FOLDERS ON)
@@ -26,12 +26,14 @@ set_target_properties(sndfile PROPERTIES FOLDER "Dependencies/libsndfile")
 
 set_target_properties(SDL2 PROPERTIES FOLDER "Dependencies/SDL2")
 set_target_properties(SDL2main PROPERTIES FOLDER "Dependencies/SDL2")
+set_target_properties(SDL2_test PROPERTIES FOLDER "Dependencies/SDL2")
 set_target_properties(SDL2-static PROPERTIES FOLDER "Dependencies/SDL2")
+set_target_properties(sdl_headers_copy PROPERTIES FOLDER "Dependencies/SDL2")
 
 set_target_properties(OpenAL PROPERTIES FOLDER "Dependencies/OpenAL")
 set_target_properties(build_version PROPERTIES FOLDER "Dependencies/OpenAL")
-set_target_properties(common PROPERTIES FOLDER "Dependencies/OpenAL")
-set_target_properties(ex-common PROPERTIES FOLDER "Dependencies/OpenAL")
+set_target_properties(alcommon PROPERTIES FOLDER "Dependencies/OpenAL")
+set_target_properties(al-excommon PROPERTIES FOLDER "Dependencies/OpenAL")
 
 set_target_properties(lua_shared PROPERTIES FOLDER "Dependencies/Lua")
 set_target_properties(lua_static PROPERTIES FOLDER "Dependencies/Lua")

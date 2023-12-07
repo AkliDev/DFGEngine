@@ -1,13 +1,13 @@
 #pragma once
 
-#include "DFGEngine.h"
+
 
 #include "DFGEngine/Renderer/EditorCamera.h"
 
-#include "Game/GameCamera.h"
-#include "Game/Level.h"
-#include "Game/Paddle.h"
-#include "Game/Ball.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "Game.h"
 
 #include "LuaBinding.h"
 #include "TestRegistration.h"
@@ -16,14 +16,6 @@ namespace DFGEngine
 {
 	class Sandbox2D : public Layer
 	{
-		// Represents the current state of the game
-		enum GameState
-		{
-			GAME_ACTIVE,
-			GAME_MENU,
-			GAME_WIN
-		};
-
 	public:
 		Sandbox2D();
 		virtual ~Sandbox2D() = default;
@@ -40,28 +32,12 @@ namespace DFGEngine
 		bool OnKeyPressed(KeyPressedEvent& e);
 		void OnRender(ProjectionCamera& camera);
 		void RenderSky(ProjectionCamera& camera);
-		void DetectCollisions();
-		
-		void ResetLevel();
-		void ResetPlayer();
 
 	private:
 		float m_ViewportWidth, m_ViewportHeight;
 		Ref<FrameBuffer> m_Framebuffer;
 		EditorCamera m_EditorCamera;
-		GameCamera m_GameCamera;
-	
-		GameState m_GameState = GAME_MENU;
-		float m_LevelWitdh = 25;
-		float m_LevelHeight = 20;
-		std::vector<Level> m_Levels;
-		uint32_t m_CurrentLevel = 0;
 
-		Ref<Entity> m_Tracker;
-		Ref<Paddle> m_Paddle;
-		Ref<Ball> m_Ball;
-		Ref<Brick> m_Brick;
-		Ref<Brick> m_Brick2;
-		uint32_t m_Lives = 2;
+		Game m_Game;
 	};
 }

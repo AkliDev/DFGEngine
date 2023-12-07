@@ -8,6 +8,7 @@ namespace DFGEngine
 {
 	Ref<spdlog::logger> Log::s_CoreLogger;
 	Ref<spdlog::logger> Log::s_ClientLogger;
+	Ref<spdlog::logger> Log::s_NetworkLogger;
 
 	void Log::Init()
 	{
@@ -27,5 +28,10 @@ namespace DFGEngine
 		spdlog::register_logger(s_ClientLogger);
 		s_ClientLogger->set_level(spdlog::level::trace);
 		s_ClientLogger->flush_on(spdlog::level::trace);
+
+		s_NetworkLogger = std::make_shared<spdlog::logger>("Network", begin(logSinks), end(logSinks));
+		spdlog::register_logger(s_NetworkLogger);
+		s_NetworkLogger->set_level(spdlog::level::trace);
+		s_NetworkLogger->flush_on(spdlog::level::trace);
 	}
 }

@@ -39,9 +39,9 @@ namespace DFGEngine
         DFG_CORE_ASSERT(status, "failed to initialize Glad!");
 
         DFG_CORE_INFO("OpenGL Info:");
-        DFG_CORE_INFO("  Vendor:    {0}", glGetString(GL_VENDOR));
-        DFG_CORE_INFO("  Renderer:  {0}", glGetString(GL_RENDERER));
-        DFG_CORE_INFO("  Version:   {0}", glGetString(GL_VERSION));
+        DFG_CORE_INFO("  Vendor:    {0}", (char*)glGetString(GL_VENDOR));
+        DFG_CORE_INFO("  Renderer:  {0}", (char*)glGetString(GL_RENDERER));
+        DFG_CORE_INFO("  Version:   {0}", (char*)glGetString(GL_VERSION));
 
         DFG_CORE_ASSERT(GLVersion.major > 4 || (GLVersion.major == 4 && GLVersion.minor >= 6), "Alternate requires at least OpenGL version 4.6!");
     }
