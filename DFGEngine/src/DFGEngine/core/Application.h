@@ -16,10 +16,29 @@
 
 namespace DFGEngine
 {
+	struct ApplicationCommandLineArgs
+	{
+		int Count = 0;
+		char** Args = nullptr;
+
+		const char* operator[](int index) const
+		{
+			DFG_CORE_ASSERT(index < Count);
+			return Args[index];
+		}
+	};
+
+	struct ApplicationSpecification
+	{
+		std::string Name = "DFG Application";
+		std::string WorkingDirectory;
+		ApplicationCommandLineArgs CommandLineArgs;
+	};
+
 	class Application
 	{
 	public:
-		Application(const std::string& name);
+		Application(const ApplicationSpecification& specification);
 		virtual ~Application();
 
 		void Run();
@@ -33,6 +52,7 @@ namespace DFGEngine
 		static Application& Get() { return *s_instance; }	
 		inline Window& GetWindow() { return *m_Window; }
 
+		const ApplicationSpecification& GetSpecification() const { return m_Specification; }
 	private:
 		bool OnWindowClosed(WindowCloseEvent& e);
 		bool OnKeyPressedEvent(KeyPressedEvent& e);
@@ -41,6 +61,7 @@ namespace DFGEngine
 		bool OnWindowRestored(WindowRestoredEvent& e);
 
 	private:
+		ApplicationSpecification m_Specification;
 		Scope<Window> m_Window;
 
 		bool m_Running = true;
@@ -51,7 +72,7 @@ namespace DFGEngine
 		static Application* s_instance;
 	};
 
-	//To be defined in a CLIENT
-	Application* CreateApplication();
+	// To be defined in CLIENT
+	Application* CreateApplication(ApplicationCommandLineArgs args);
 }
 

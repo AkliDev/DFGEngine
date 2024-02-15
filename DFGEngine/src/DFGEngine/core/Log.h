@@ -18,10 +18,14 @@ namespace DFGEngine
 		inline static Ref<spdlog::logger>& GetCoreLogger() { return s_CoreLogger; }
 		inline static Ref<spdlog::logger>& GetClientLogger() { return s_ClientLogger; }
 		inline static Ref<spdlog::logger>& GetNetowrkLogger() { return s_NetworkLogger; }
+
+		inline static Ref<spdlog::logger>& GetSyncLogger() { return s_SyncLogger; }
 	private:
 		static Ref<spdlog::logger> s_CoreLogger;
 		static Ref<spdlog::logger> s_ClientLogger;
 		static Ref<spdlog::logger> s_NetworkLogger;
+
+		static Ref<spdlog::logger> s_SyncLogger;
 	};
 }
 
@@ -38,6 +42,13 @@ namespace DFGEngine
 #define DFG_INFO(...)			::DFGEngine::Log::GetClientLogger()->info(__VA_ARGS__)
 #define DFG_ERROR(...)			::DFGEngine::Log::GetClientLogger()->error(__VA_ARGS__)
 #define DFG_CRITICAL(...)		::DFGEngine::Log::GetClientLogger()->critical(__VA_ARGS__)
+
+//Client Sync log macros
+#define DFG_SYNC_TRACE(...)		::DFGEngine::Log::GetSyncLogger()->trace(__VA_ARGS__)
+#define DFG_SYNC_WARN(...)		::DFGEngine::Log::GetSyncLogger()->warn(__VA_ARGS__)
+#define DFG_SYNC_INFO(...)		::DFGEngine::Log::GetSyncLogger()->info(__VA_ARGS__)
+#define DFG_SYNC_ERROR(...)		::DFGEngine::Log::GetSyncLogger()->error(__VA_ARGS__)
+#define DFG_SYNC_CRITICAL(...)	::DFGEngine::Log::GetSyncLogger()->critical(__VA_ARGS__)
 
 
 

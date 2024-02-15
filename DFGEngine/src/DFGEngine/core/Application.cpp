@@ -15,14 +15,15 @@ namespace DFGEngine
 
 	Application* Application::s_instance = nullptr;
 
-	Application::Application(const std::string& name)
+	Application::Application(const ApplicationSpecification& specification)
+		: m_Specification(specification)
 	{
 		//DFG_PROFILE_FUNCTION();
 
 		DFG_CORE_ASSERT(!s_instance, "Application already exisits!");
 		s_instance = this;
 
-		m_Window = Window::Create(WindowProps(name));
+		m_Window = Window::Create(WindowProps(m_Specification.Name));
 		m_Window->SetEventCallback(DFG_BIND_EVENT_FN(Application::OnEvent));
 		m_Window->SetVSync(false);		
 		m_Window->SetShowCursor(false);

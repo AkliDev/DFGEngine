@@ -8,8 +8,8 @@ namespace DFGEngine
 	class Sandbox : public Application
 	{
 	public:
-		Sandbox()
-			: Application("Sandbox")
+		Sandbox(const ApplicationSpecification& spec)
+			: Application(spec)
 		{
 			PushLayer(new Sandbox2D());
 		}
@@ -19,8 +19,12 @@ namespace DFGEngine
 		}
 	};
 
-	Application* DFGEngine::CreateApplication()
+	Application* CreateApplication(ApplicationCommandLineArgs args)
 	{
-		return new Sandbox();
+		ApplicationSpecification spec;
+		spec.Name = "Rollback Test";
+		spec.CommandLineArgs = args;
+
+		return new Sandbox(spec);
 	}
 }

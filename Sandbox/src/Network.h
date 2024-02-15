@@ -6,7 +6,8 @@ const unsigned int NET_PACKET_INPUT_HISTORY_SIZE = 10;
 struct NetworkInputPackedge
 {
 	uint32_t InputHistory[NET_PACKET_INPUT_HISTORY_SIZE] = { 0 };
-	int FrameCount = -1;
+	int FrameCount = 0;
+	int FrameDelta = 0;
 };
 
 bool InitializeHost();
