@@ -182,14 +182,14 @@ namespace DFGEngine
 
 	Ref<SFXBuffer> AudioLibrary::LoadSFX(const std::string& name, const std::string& filePath)
 	{
-		auto& buffer = CreateRef<SFXBuffer>(filePath);
+		auto buffer = CreateRef<SFXBuffer>(filePath);
 		AddSFX(name, buffer);
 		return buffer;
 	}
 
 	Ref<AudioStream> AudioLibrary::LoadMusic(const std::string& name, const std::string& filePath)
 	{
-		auto& buffer = CreateRef<AudioStream>(filePath);
+		auto buffer = CreateRef<AudioStream>(filePath);
 		AddMusic(name, buffer);
 		return buffer;
 	}
