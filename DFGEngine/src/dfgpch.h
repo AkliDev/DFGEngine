@@ -25,7 +25,6 @@
 #include <fstream>
 
 #include "DFGEngine/Core/Base.h"
-
 #include "DFGEngine/Core/Log.h"
 
 //#include "DFEngine/Debug/Instrumentor.h"

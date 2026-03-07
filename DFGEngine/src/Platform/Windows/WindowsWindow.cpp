@@ -42,7 +42,7 @@ namespace DFGEngine {
 
 			DFG_CORE_INFO("Initializing SDL");
 			int success = SDL_Init(SDL_INIT_VIDEO);
-			if (success != 0)
+			if (success < 0)
 			{
 				DFG_CORE_ASSERT(success, "Could not initialize SDL!");
 			}

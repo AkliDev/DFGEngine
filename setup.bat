@@ -1,4 +1,4 @@
 mkdir build 
 cd build
 
-cmake -G "Visual Studio 16 2019" -A x64 ..
+cmake -G "Visual Studio 18 2026" -A x64 ..

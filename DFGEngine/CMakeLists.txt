@@ -26,7 +26,7 @@ target_include_directories(DFGEngine PRIVATE
 	Vendor/stb_image
 	Vendor/openal-soft/include	
 	Vendor/libsndfile/include	
-	Vendor/Lua/lua-5.4.4/include	
+	Vendor/Lua/lua-5.4.7/include	
 )
 
 #External links

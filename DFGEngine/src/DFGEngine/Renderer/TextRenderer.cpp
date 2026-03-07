@@ -15,7 +15,7 @@ namespace DFGEngine
 		
 		FT_Library ft;
 		uint32_t result = FT_Init_FreeType(&ft);
-		DFG_ASSERT(ft > 0, "ERROR::FREETYPE: Could not init FreeType Library");
+		DFG_ASSERT(ft != nullptr, "ERROR::FREETYPE: Could not init FreeType Library");
 
 		FT_Face face;
 		result = FT_New_Face(ft, font.c_str(), 0, &face);
