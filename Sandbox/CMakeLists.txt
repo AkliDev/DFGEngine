@@ -40,6 +40,10 @@ target_link_libraries(Sandbox PRIVATE
 #    ${CMAKE_CURRENT_BINARY_DIR}/assets
 #)
 
+set_target_properties(Sandbox PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY ${CMAKE_CURRENT_LIST_DIR}
+)
+
 add_custom_command(TARGET Sandbox POST_BUILD 
 	COMMAND ${CMAKE_COMMAND} -E copy_if_different
 	$<TARGET_FILE:SDL2::SDL2>        
